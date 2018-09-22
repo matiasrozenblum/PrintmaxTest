@@ -20,8 +20,8 @@
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/edt_name"
-                android:hint="Name"
-                android:textSize="10sp"
+                android:hint="@string/register_layout_name_hint"
+                android:textSize="12sp"
                 android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -30,8 +30,8 @@
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/edt_address"
-                android:hint="Address"
-                android:textSize="10sp"
+                android:hint="@string/register_layout_address_hint"
+                android:textSize="12sp"
                 android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/edt_birth"
-                android:hint="yyyy-mm-dd"
+                android:hint="@string/register_layout_birth_hint"
                 android:textSize="20sp"
                 android:digits="123456789-"
                 android:layout_width="match_parent"
@@ -51,9 +51,8 @@
 
         <Button
             android:id="@+id/btn_register"
-            android:text="Register"
+            android:text="@string/register_layout_button"
             android:background="@color/colorPrimaryDark"
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

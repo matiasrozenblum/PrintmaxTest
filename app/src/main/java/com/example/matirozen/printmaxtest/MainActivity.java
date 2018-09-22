@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.support.annotation.CheckResult;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -17,10 +16,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
-import com.example.matirozen.printmaxtest.Model.User;
-import com.example.matirozen.printmaxtest.Retrofit.IPrintmaxTestAPI;
-import com.example.matirozen.printmaxtest.Utils.Common;
+import com.example.matirozen.printmaxtest.model.CheckUserResponse;
+import com.example.matirozen.printmaxtest.model.User;
+import com.example.matirozen.printmaxtest.retrofit.PrintmaxTestService;
 import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
@@ -31,8 +29,6 @@ import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.szagurskii.patternedtextwatcher.PatternedTextWatcher;
-
-import org.w3c.dom.Text;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -45,19 +41,16 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1000;
-    Button btn_continue;
 
-    IPrintmaxTestAPI mService;
+    private Button btnContinue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mService = Common.getAPI();
-
-        btn_continue = (Button)findViewById(R.id.btn_continue);
-        btn_continue.setOnClickListener(new View.OnClickListener(){
+        btnContinue = findViewById(R.id.btn_continue);
+        btnContinue.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 startLoginPage(LoginType.PHONE);
@@ -76,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE){
+            if (data == null){
+                return;
+            }
             AccountKitLoginResult result = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
 
             if(result.getError() != null){
@@ -92,18 +88,18 @@ public class MainActivity extends AppCompatActivity {
                     AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
                         @Override
                         public void onSuccess(final Account account) {
-                            mService.checkExistsUser(account.getPhoneNumber().toString())
+                            PrintmaxTestService.get().checkIfUserExists(account.getPhoneNumber().toString())
                                     .enqueue(new Callback<CheckUserResponse>() {
                                         @Override
                                         public void onResponse(Call<CheckUserResponse> call, Response<CheckUserResponse> response) {
+                                            alertDialog.dismiss();
+                                            if (!response.isSuccessful()){
+                                                return;
+                                            }
                                             CheckUserResponse userResponse = response.body();
                                             if(userResponse.isExists()){
                                                 //If User already exists, just start new Activity
-                                                alertDialog.dismiss();
                                             } else {
-                                                //Else register
-                                                alertDialog.dismiss();
-
                                                 showRegisterDialog(account.getPhoneNumber().toString());
                                             }
                                         }
@@ -111,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void onFailure(Call<CheckUserResponse> call, Throwable t) {
                                             Button a;
+                                            //Best log ever
                                             Log.d("hola", "hola");
                                         }
                                     });
@@ -131,18 +128,18 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setTitle("REGISTER");
 
         LayoutInflater inflater = this.getLayoutInflater();
-        View register_layout = inflater.inflate(R.layout.register_layout, null);
+        View registerLayout = inflater.inflate(R.layout.register_layout, null);
 
-        final MaterialEditText edt_name = (MaterialEditText)register_layout.findViewById(R.id.edt_name);
-        final MaterialEditText edt_address = (MaterialEditText)register_layout.findViewById(R.id.edt_address);
-        final MaterialEditText edt_birth = (MaterialEditText)register_layout.findViewById(R.id.edt_birth);
+        final MaterialEditText edtName = registerLayout.findViewById(R.id.edt_name);
+        final MaterialEditText edtAddress = registerLayout.findViewById(R.id.edt_address);
+        final MaterialEditText edtBirth = registerLayout.findViewById(R.id.edt_birth);
 
-        Button btn_register = (Button)register_layout.findViewById(R.id.btn_register);
+        Button btnRegister = registerLayout.findViewById(R.id.btn_register);
 
-        edt_birth.addTextChangedListener(new PatternedTextWatcher("####-##-##"));
+        edtBirth.addTextChangedListener(new PatternedTextWatcher("####-##-##"));
 
         //Event
-        btn_register.setOnClickListener(new View.OnClickListener(){
+        btnRegister.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
 
@@ -152,47 +149,63 @@ public class MainActivity extends AppCompatActivity {
                 waitingDialog.show();
                 waitingDialog.setMessage("Please waiting...");
 
-                if(TextUtils.isEmpty(edt_address.getText().toString())){
+                String address = (edtAddress.getText() != null)? edtAddress.getText().toString() : null;
+                String birth = (edtBirth.getText() != null)? edtBirth.getText().toString() : null;
+                String name = (edtName.getText() != null)? edtName.getText().toString() : null;
+
+                if(TextUtils.isEmpty(address)){
                     Toast.makeText(MainActivity.this, "Please enter your address", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(edt_birth.getText().toString())){
+                if(TextUtils.isEmpty(birth)){
                     Toast.makeText(MainActivity.this, "Please enter your birth", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(edt_name.getText().toString())){
+                if(TextUtils.isEmpty(name)){
                     Toast.makeText(MainActivity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                mService.registerNewUser(phone,
-                        edt_name.getText().toString(),
-                        edt_address.getText().toString(),
-                        edt_birth.getText().toString())
-                        .enqueue(new Callback<User>() {
-                            @Override
-                            public void onResponse(Call<User> call, Response<User> response) {
-                                waitingDialog.dismiss();
-                                User user = response.body();
-                                if(TextUtils.isEmpty(user.getError_msg())){
-                                    Toast.makeText(MainActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                                    //Start new activity
+                PrintmaxTestService.get().registerNewUser(phone, name, address, birth)
+                    .enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            waitingDialog.dismiss();
 
+                            if (response.isSuccessful()){
+                                User user = response.body();
+                                //Aca en vez de preguntar por el error_msg del user preguntas por el isSuccessful
+                                //y si no intentas de mapearlo a otro objeto usando el boject mapper
+                                //Ej:  RetrofitClient.obtainMapper().readValue(response.errorBody().byteStream(), Error.class);
+                                if(user != null){
+                                    showSuccessToast();
+                                    //Start new activity
                                 }
                             }
+                        }
 
-                            @Override
-                            public void onFailure(Call<User> call, Throwable t) {
-                                waitingDialog.dismiss();
-                            }
-                        });
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            waitingDialog.dismiss();
+                        }
+                    });
             }
 
         });
 
-        alertDialog.setView(register_layout);
+        alertDialog.setView(registerLayout);
         alertDialog.show();
+    }
 
+    //Fijate que siempre que muestres un toast o llames a un activity estes en un contexto de vista
+    //Si lo llamas en un callback estas en otro contexto, ojo con esas cosas porque pueden romper
+    private void showSuccessToast(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void printKeyHash() {
