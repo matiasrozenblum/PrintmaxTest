@@ -1,9 +1,13 @@
 package com.example.matirozen.printmaxtest.Retrofit;
 
 import com.example.matirozen.printmaxtest.BuildConfig;
+import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.User;
 
+import java.util.List;
+
+import io.reactivex.Observable;
 import retrofit2.Call;
 
 public class PrintmaxTestService {
@@ -34,5 +38,9 @@ public class PrintmaxTestService {
 
     public Call<User> getUserInformation(String phone){
         return api.getUserInformation(phone);
+    }
+
+    public Call<List<Banner>> getBanners(){
+        return api.getBanners();
     }
 }

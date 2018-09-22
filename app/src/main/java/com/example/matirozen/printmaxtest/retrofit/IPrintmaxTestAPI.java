@@ -1,13 +1,16 @@
 package com.example.matirozen.printmaxtest.Retrofit;
 
+import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.User;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 public interface IPrintmaxTestAPI {
     @FormUrlEncoded
@@ -24,4 +27,7 @@ public interface IPrintmaxTestAPI {
     @FormUrlEncoded
     @POST("getuser.php")
     Call<User> getUserInformation(@Field("phone") String phone);
+
+    @GET("getbanner.php")
+    Call<List<Banner>> getBanners();
 }
