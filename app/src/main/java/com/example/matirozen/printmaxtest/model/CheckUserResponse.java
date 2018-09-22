@@ -2,9 +2,9 @@ package com.example.matirozen.printmaxtest.model;
 
 public class CheckUserResponse {
     private boolean exists;
-    private String error_msg;
 
-    public CheckUserResponse() {
+    public CheckUserResponse(boolean exists) {
+        this.exists = exists;
     }
 
     public boolean isExists() {
@@ -15,11 +15,10 @@ public class CheckUserResponse {
         this.exists = exists;
     }
 
-    public String getError_msg() {
-        return error_msg;
-    }
-
-    public void setError_msg(String error_msg) {
-        this.error_msg = error_msg;
+    @Override
+    public String toString() {
+        return "CheckUserResponse{" +
+                "exists=" + exists +
+                '}';
     }
 }

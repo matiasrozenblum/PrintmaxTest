@@ -17,8 +17,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.model.CheckUserResponse;
+import com.example.matirozen.printmaxtest.model.Error;
 import com.example.matirozen.printmaxtest.model.User;
 import com.example.matirozen.printmaxtest.retrofit.PrintmaxTestService;
+import com.example.matirozen.printmaxtest.retrofit.RetrofitClient;
 import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
@@ -174,13 +176,14 @@ public class MainActivity extends AppCompatActivity {
 
                             if (response.isSuccessful()){
                                 User user = response.body();
-                                if(user != null && TextUtils.isEmpty(user.getError_msg())){
+                                //Aca en vez de preguntar por el error_msg del user preguntas por el isSuccessful
+                                //y si no intentas de mapearlo a otro objeto usando el boject mapper
+                                //Ej:  RetrofitClient.obtainMapper().readValue(response.errorBody().byteStream(), Error.class);
+                                if(user != null){
                                     showSuccessToast();
                                     //Start new activity
-
                                 }
                             }
-
                         }
 
                         @Override

@@ -5,9 +5,12 @@ public class User {
     private String address;
     private String name;
     private String birth;
-    private String error_msg; //empty if user returns object
 
-    public User() {
+    public User(String phone, String address, String name, String birth) {
+        this.phone = phone;
+        this.address = address;
+        this.name = name;
+        this.birth = birth;
     }
 
     public String getPhone() {
@@ -42,11 +45,13 @@ public class User {
         this.birth = birth;
     }
 
-    public String getError_msg() {
-        return error_msg;
-    }
-
-    public void setError_msg(String error_msg) {
-        this.error_msg = error_msg;
+    @Override
+    public String toString() {
+        return "User{" +
+                "phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", name='" + name + '\'' +
+                ", birth='" + birth + '\'' +
+                '}';
     }
 }

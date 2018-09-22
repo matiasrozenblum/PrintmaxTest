@@ -17,25 +17,28 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class RetrofitClient {
 
     private static Retrofit retrofit = null;
+    private static ObjectMapper mapper = null;
 
     public static Retrofit createClient(String baseUrl){
         if(retrofit == null){
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .client(createClient())
-                    .addConverterFactory(JacksonConverterFactory.create(createMapper()))
+                    .addConverterFactory(JacksonConverterFactory.create(obtainMapper()))
                     .build();
         }
         return retrofit;
     }
 
-    private static ObjectMapper createMapper(){
-        ObjectMapper mapper = new ObjectMapper();
+    public static ObjectMapper obtainMapper(){
+        if (mapper == null) {
+            mapper = new ObjectMapper();
 
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        }
 
         return mapper;
     }
