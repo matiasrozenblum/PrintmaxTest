@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -17,10 +17,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.model.CheckUserResponse;
-import com.example.matirozen.printmaxtest.model.Error;
 import com.example.matirozen.printmaxtest.model.User;
 import com.example.matirozen.printmaxtest.retrofit.PrintmaxTestService;
-import com.example.matirozen.printmaxtest.retrofit.RetrofitClient;
 import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
@@ -136,12 +134,12 @@ public class MainActivity extends AppCompatActivity {
         final MaterialEditText edtAddress = registerLayout.findViewById(R.id.edt_address);
         final MaterialEditText edtBirth = registerLayout.findViewById(R.id.edt_birth);
 
-        Button btn_register = registerLayout.findViewById(R.id.btn_register);
+        Button btnRegister = registerLayout.findViewById(R.id.btn_register);
 
         edtBirth.addTextChangedListener(new PatternedTextWatcher("####-##-##"));
 
         //Event
-        btn_register.setOnClickListener(new View.OnClickListener(){
+        btnRegister.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
 
