@@ -3,6 +3,10 @@ package com.example.matirozen.printmaxtest.model;
 public class CheckUserResponse {
     private boolean exists;
 
+    public CheckUserResponse(){
+
+    }
+
     public CheckUserResponse(boolean exists) {
         this.exists = exists;
     }
