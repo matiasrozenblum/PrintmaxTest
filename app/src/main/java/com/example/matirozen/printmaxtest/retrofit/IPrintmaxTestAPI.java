@@ -1,7 +1,7 @@
-package com.example.matirozen.printmaxtest.Retrofit;
+package com.example.matirozen.printmaxtest.retrofit;
 
-import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
-import com.example.matirozen.printmaxtest.Model.User;
+import com.example.matirozen.printmaxtest.model.CheckUserResponse;
+import com.example.matirozen.printmaxtest.model.User;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

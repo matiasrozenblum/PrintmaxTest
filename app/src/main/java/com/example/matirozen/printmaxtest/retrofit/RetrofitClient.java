@@ -1,4 +1,4 @@
-package com.example.matirozen.printmaxtest.Retrofit;
+package com.example.matirozen.printmaxtest.retrofit;
 
 import com.example.matirozen.printmaxtest.BuildConfig;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,11 +18,7 @@ public class RetrofitClient {
 
     private static Retrofit retrofit = null;
 
-    public static IPrintmaxTestAPI getPrintmaxTestAPI(){
-        return createClient(BuildConfig.BASE_URL).create(IPrintmaxTestAPI.class);
-    }
-
-    private static Retrofit createClient(String baseUrl){
+    public static Retrofit createClient(String baseUrl){
         if(retrofit == null){
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)

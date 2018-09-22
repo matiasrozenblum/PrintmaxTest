@@ -16,10 +16,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
-import com.example.matirozen.printmaxtest.Model.User;
-import com.example.matirozen.printmaxtest.Retrofit.IPrintmaxTestAPI;
-import com.example.matirozen.printmaxtest.Retrofit.RetrofitClient;
+import com.example.matirozen.printmaxtest.model.CheckUserResponse;
+import com.example.matirozen.printmaxtest.model.User;
+import com.example.matirozen.printmaxtest.retrofit.PrintmaxTestService;
 import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
@@ -42,19 +41,16 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1000;
-    Button btn_continue;
 
-    IPrintmaxTestAPI mService;
+    private Button btnContinue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mService = RetrofitClient.getPrintmaxTestAPI();
-
-        btn_continue = findViewById(R.id.btn_continue);
-        btn_continue.setOnClickListener(new View.OnClickListener(){
+        btnContinue = findViewById(R.id.btn_continue);
+        btnContinue.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 startLoginPage(LoginType.PHONE);
@@ -73,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE){
+            if (data == null){
+                return;
+            }
             AccountKitLoginResult result = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
 
             if(result.getError() != null){
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
                         @Override
                         public void onSuccess(final Account account) {
-                            mService.checkExistsUser(account.getPhoneNumber().toString())
+                            PrintmaxTestService.get().checkIfUserExists(account.getPhoneNumber().toString())
                                     .enqueue(new Callback<CheckUserResponse>() {
                                         @Override
                                         public void onResponse(Call<CheckUserResponse> call, Response<CheckUserResponse> response) {
@@ -129,15 +128,15 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setTitle("REGISTER");
 
         LayoutInflater inflater = this.getLayoutInflater();
-        View register_layout = inflater.inflate(R.layout.register_layout, null);
+        View registerLayout = inflater.inflate(R.layout.register_layout, null);
 
-        final MaterialEditText edt_name = register_layout.findViewById(R.id.edt_name);
-        final MaterialEditText edt_address = register_layout.findViewById(R.id.edt_address);
-        final MaterialEditText edt_birth = register_layout.findViewById(R.id.edt_birth);
+        final MaterialEditText edtName = registerLayout.findViewById(R.id.edt_name);
+        final MaterialEditText edtAddress = registerLayout.findViewById(R.id.edt_address);
+        final MaterialEditText edtBirth = registerLayout.findViewById(R.id.edt_birth);
 
-        Button btn_register = register_layout.findViewById(R.id.btn_register);
+        Button btn_register = registerLayout.findViewById(R.id.btn_register);
 
-        edt_birth.addTextChangedListener(new PatternedTextWatcher("####-##-##"));
+        edtBirth.addTextChangedListener(new PatternedTextWatcher("####-##-##"));
 
         //Event
         btn_register.setOnClickListener(new View.OnClickListener(){
@@ -150,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
                 waitingDialog.show();
                 waitingDialog.setMessage("Please waiting...");
 
-                String address = (edt_address.getText() != null)? edt_address.getText().toString() : null;
-                String birth = (edt_birth.getText() != null)? edt_birth.getText().toString() : null;
-                String name = (edt_name.getText() != null)? edt_name.getText().toString() : null;
+                String address = (edtAddress.getText() != null)? edtAddress.getText().toString() : null;
+                String birth = (edtBirth.getText() != null)? edtBirth.getText().toString() : null;
+                String name = (edtName.getText() != null)? edtName.getText().toString() : null;
 
                 if(TextUtils.isEmpty(address)){
                     Toast.makeText(MainActivity.this, "Please enter your address", Toast.LENGTH_SHORT).show();
@@ -167,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                mService.registerNewUser(phone, name, address, birth)
+                PrintmaxTestService.get().registerNewUser(phone, name, address, birth)
                     .enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
@@ -193,9 +192,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        alertDialog.setView(register_layout);
+        alertDialog.setView(registerLayout);
         alertDialog.show();
-
     }
 
     //Fijate que siempre que muestres un toast o llames a un activity estes en un contexto de vista
@@ -205,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Toast.makeText(MainActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-
             }
         });
     }

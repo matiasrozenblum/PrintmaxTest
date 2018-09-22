@@ -1,4 +1,4 @@
-package com.example.matirozen.printmaxtest.Model;
+package com.example.matirozen.printmaxtest.model;
 
 public class User {
     private String phone;
