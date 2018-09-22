@@ -12,10 +12,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
+
+import org.w3c.dom.Text;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    TextView txtName, txtPhone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,14 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        txtName = (TextView)headerView.findViewById(R.id.txtName);
+        txtPhone = (TextView)headerView.findViewById(R.id.txtPhone);
+
+        //Set info
+        txtName.setText(PrintmaxTestService.currentUser.getName());
+        txtPhone.setText(PrintmaxTestService.currentUser.getPhone());
     }
 
     @Override

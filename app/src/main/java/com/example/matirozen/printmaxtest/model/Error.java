@@ -1,4 +1,4 @@
-package com.example.matirozen.printmaxtest.model;
+package com.example.matirozen.printmaxtest.Model;
 
 public class Error {
     private String message;

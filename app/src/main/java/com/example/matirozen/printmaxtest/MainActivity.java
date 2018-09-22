@@ -17,8 +17,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
-import com.example.matirozen.printmaxtest.model.CheckUserResponse;
-import com.example.matirozen.printmaxtest.model.User;
+import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
+import com.example.matirozen.printmaxtest.Model.User;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onResponse(Call<User> call, Response<User> response) {
                                                         //If User already exists, just start new Activity
+                                                        PrintmaxTestService.currentUser = response.body();
                                                         startActivity(new Intent(MainActivity.this, HomeActivity.class));
                                                         finish();
                                                     }
