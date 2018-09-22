@@ -19,4 +19,7 @@ public interface IPrintmaxTestAPI {
                                @Query("name") String name,
                                @Query("address") String address,
                                @Query("birth") String birth);
+
+    @POST("getuser.php")
+    Call<User> getUserInformation(@Query("phone") String phone);
 }

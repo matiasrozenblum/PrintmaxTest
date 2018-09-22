@@ -16,9 +16,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.example.matirozen.printmaxtest.model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.model.User;
-import com.example.matirozen.printmaxtest.retrofit.PrintmaxTestService;
+import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
@@ -56,6 +57,60 @@ public class MainActivity extends AppCompatActivity {
                 startLoginPage(LoginType.PHONE);
             }
         });
+
+        //Check session
+        if(AccountKit.getCurrentAccessToken() != null){
+            final android.app.AlertDialog alertDialog = new SpotsDialog(MainActivity.this);
+            alertDialog.show();
+            alertDialog.setMessage("Please waiting...");
+            //Auto login
+            AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+                @Override
+                public void onSuccess(final Account account) {
+                    PrintmaxTestService.get().checkIfUserExists(account.getPhoneNumber().toString())
+                            .enqueue(new Callback<CheckUserResponse>() {
+                                @Override
+                                public void onResponse(Call<CheckUserResponse> call, Response<CheckUserResponse> response) {
+                                    alertDialog.dismiss();
+                                    if (!response.isSuccessful()){
+                                        return;
+                                    }
+                                    CheckUserResponse userResponse = response.body();
+                                    if(userResponse.isExists()){
+                                        //Fetch information
+                                        PrintmaxTestService.get().getUserInformation(account.getPhoneNumber().toString())
+                                                .enqueue(new Callback<User>() {
+                                                    @Override
+                                                    public void onResponse(Call<User> call, Response<User> response) {
+                                                        //If User already exists, just start new Activity
+                                                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                                        finish();
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<User> call, Throwable t) {
+                                                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+                                    } else {
+                                        showRegisterDialog(account.getPhoneNumber().toString());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<CheckUserResponse> call, Throwable t) {
+                                    Log.d("hola", "hola");
+                                }
+                            });
+                }
+
+                @Override
+                public void onError(AccountKitError accountKitError) {
+                    Log.d("ERROR", accountKitError.getErrorType().getMessage());
+                }
+            });
+        }
     }
 
     private void startLoginPage(LoginType loginType) {
@@ -98,7 +153,22 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                             CheckUserResponse userResponse = response.body();
                                             if(userResponse.isExists()){
-                                                //If User already exists, just start new Activity
+                                                //Fetch information
+                                                PrintmaxTestService.get().getUserInformation(account.getPhoneNumber().toString())
+                                                        .enqueue(new Callback<User>() {
+                                                            @Override
+                                                            public void onResponse(Call<User> call, Response<User> response) {
+                                                                //If User already exists, just start new Activity
+                                                                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                                                finish();
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<User> call, Throwable t) {
+                                                                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+
                                             } else {
                                                 showRegisterDialog(account.getPhoneNumber().toString());
                                             }
@@ -106,8 +176,6 @@ public class MainActivity extends AppCompatActivity {
 
                                         @Override
                                         public void onFailure(Call<CheckUserResponse> call, Throwable t) {
-                                            Button a;
-                                            //Best log ever
                                             Log.d("hola", "hola");
                                         }
                                     });
@@ -124,8 +192,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showRegisterDialog(final String phone){
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-        alertDialog.setTitle("REGISTER");
+        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("REGISTER");
 
         LayoutInflater inflater = this.getLayoutInflater();
         View registerLayout = inflater.inflate(R.layout.register_layout, null);
@@ -137,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnRegister = registerLayout.findViewById(R.id.btn_register);
 
         edtBirth.addTextChangedListener(new PatternedTextWatcher("####-##-##"));
+        builder.setView(registerLayout);
+        final AlertDialog dialog = builder.create();
 
         //Event
         btnRegister.setOnClickListener(new View.OnClickListener(){
@@ -144,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
 
                 //Close dialog
-                alertDialog.create().dismiss();
+                dialog.dismiss();
                 final android.app.AlertDialog waitingDialog = new SpotsDialog(MainActivity.this);
                 waitingDialog.show();
                 waitingDialog.setMessage("Please waiting...");
@@ -179,7 +249,10 @@ public class MainActivity extends AppCompatActivity {
                                 //Ej:  RetrofitClient.obtainMapper().readValue(response.errorBody().byteStream(), Error.class);
                                 if(user != null){
                                     showSuccessToast();
+                                    PrintmaxTestService.currentUser = response.body();
                                     //Start new activity
+                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                    finish();
                                 }
                             }
                         }
@@ -193,8 +266,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        alertDialog.setView(registerLayout);
-        alertDialog.show();
+        //alertDialog.setView(registerLayout);
+        dialog.show();
     }
 
     //Fijate que siempre que muestres un toast o llames a un activity estes en un contexto de vista
