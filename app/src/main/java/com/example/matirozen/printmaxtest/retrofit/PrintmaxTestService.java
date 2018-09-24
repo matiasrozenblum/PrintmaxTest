@@ -4,6 +4,7 @@ import com.example.matirozen.printmaxtest.BuildConfig;
 import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
+import com.example.matirozen.printmaxtest.Model.Drink;
 import com.example.matirozen.printmaxtest.Model.User;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class PrintmaxTestService {
 
     private com.example.matirozen.printmaxtest.Retrofit.IPrintmaxTestAPI api;
     public static User currentUser = null;
+    public static Category currentCategory = null;
 
     public static PrintmaxTestService get() {
         if (INSTANCE == null) {
@@ -47,5 +49,9 @@ public class PrintmaxTestService {
 
     public Call<List<Category>> getMenu(){
         return api.getMenu();
+    }
+
+    public Call<List<Drink>> getDrink(String menuId){
+        return api.getDrink(menuId);
     }
 }

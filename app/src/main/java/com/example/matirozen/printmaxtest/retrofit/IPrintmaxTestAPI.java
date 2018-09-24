@@ -3,6 +3,7 @@ package com.example.matirozen.printmaxtest.Retrofit;
 import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
+import com.example.matirozen.printmaxtest.Model.Drink;
 import com.example.matirozen.printmaxtest.Model.User;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public interface IPrintmaxTestAPI {
                                @Field("name") String name,
                                @Field("address") String address,
                                @Field("birth") String birth);
+
+    @FormUrlEncoded
+    @POST("getdrink.php")
+    Call<List<Drink>> getDrink(@Field("menuId") String menuId);
 
     @FormUrlEncoded
     @POST("getuser.php")

@@ -1,5 +1,6 @@
 package com.example.matirozen.printmaxtest.Adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,9 +9,10 @@ import android.widget.TextView;
 import com.example.matirozen.printmaxtest.Interface.ItemClickListener;
 import com.example.matirozen.printmaxtest.R;
 
-public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class DrinkViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
     ImageView img_product;
-    TextView txt_menu_name;
+    TextView txt_drink_name, txt_price;
 
     ItemClickListener itemClickListener;
 
@@ -18,11 +20,12 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.
         this.itemClickListener = itemClickListener;
     }
 
-    public CategoryViewHolder(View itemView) {
+    public DrinkViewHolder(@NonNull View itemView) {
         super(itemView);
 
         img_product = (ImageView)itemView.findViewById(R.id.image_product);
-        txt_menu_name = (TextView) itemView.findViewById(R.id.txt_menu_name);
+        txt_drink_name = (TextView) itemView.findViewById(R.id.txt_drink_name);
+        txt_price = (TextView)itemView.findViewById(R.id.txt_price);
 
         itemView.setOnClickListener(this);
     }
