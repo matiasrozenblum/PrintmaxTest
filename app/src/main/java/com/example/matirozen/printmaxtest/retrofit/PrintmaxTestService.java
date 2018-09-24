@@ -2,6 +2,7 @@ package com.example.matirozen.printmaxtest.Retrofit;
 
 import com.example.matirozen.printmaxtest.BuildConfig;
 import com.example.matirozen.printmaxtest.Model.Banner;
+import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.User;
 
@@ -42,5 +43,9 @@ public class PrintmaxTestService {
 
     public Call<List<Banner>> getBanners(){
         return api.getBanners();
+    }
+
+    public Call<List<Category>> getMenu(){
+        return api.getMenu();
     }
 }

@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                                                             @Override
                                                             public void onResponse(Call<User> call, Response<User> response) {
                                                                 //If User already exists, just start new Activity
+                                                                PrintmaxTestService.currentUser = response.body();
                                                                 startActivity(new Intent(MainActivity.this, HomeActivity.class));
                                                                 finish();
                                                             }

@@ -3,6 +3,8 @@ package com.example.matirozen.printmaxtest;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,7 +19,9 @@ import android.widget.TextView;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.example.matirozen.printmaxtest.Adapter.CategoryAdapter;
 import com.example.matirozen.printmaxtest.Model.Banner;
+import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Retrofit.IPrintmaxTestAPI;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 
@@ -41,6 +45,8 @@ public class HomeActivity extends AppCompatActivity
     TextView txtName, txtPhone;
     SliderLayout sliderLayout;
 
+    RecyclerView lst_menu;
+
     //RxJava
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     @Override
@@ -50,6 +56,9 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        lst_menu = (RecyclerView)findViewById(R.id.lst_menu);
+        lst_menu.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        lst_menu.setHasFixedSize(true);
         sliderLayout = (SliderLayout)findViewById(R.id.slider);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -80,6 +89,29 @@ public class HomeActivity extends AppCompatActivity
 
         //Get banner
         getBannerImage();
+
+        //Get menu
+        getMenu();
+    }
+
+    private void getMenu() {
+        PrintmaxTestService.get().getMenu()
+                .enqueue(new Callback<List<Category>>() {
+                    @Override
+                    public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                        displayMenu(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Category>> call, Throwable t) {
+
+                    }
+                });
+    }
+
+    private void displayMenu(List<Category> categories) {
+        CategoryAdapter adapter = new CategoryAdapter(this, categories);
+        lst_menu.setAdapter(adapter);
     }
 
     private void getBannerImage(){

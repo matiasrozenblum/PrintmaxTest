@@ -1,6 +1,7 @@
 package com.example.matirozen.printmaxtest.Retrofit;
 
 import com.example.matirozen.printmaxtest.Model.Banner;
+import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.User;
 
@@ -30,4 +31,7 @@ public interface IPrintmaxTestAPI {
 
     @GET("getbanner.php")
     Call<List<Banner>> getBanners();
+
+    @GET("getmenu.php")
+    Call<List<Category>> getMenu();
 }
