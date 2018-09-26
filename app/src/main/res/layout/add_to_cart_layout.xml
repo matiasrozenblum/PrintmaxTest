@@ -33,6 +33,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/txtProductPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/text_round"
+                android:padding="4dp"
+                android:text="$3.75"
+                android:layout_gravity="right"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_weight="3"
@@ -116,8 +129,8 @@
                     android:layout_height="wrap_content" />
 
                 <RadioButton
-                    android:id="@+id/algodon"
-                    android:text="Algodon"
+                    android:id="@+id/satenNegro"
+                    android:text="Saten negro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RadioGroup>
@@ -130,27 +143,84 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="+$0"
+                        android:text="Precio x 2"
                         android:textSize="18sp"
+                        android:paddingTop="35dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="Precio x 4"
+                        android:textSize="18sp"
+                        android:paddingTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="Precio x 6"
+                        android:textSize="18sp"
+                        android:paddingTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <!-- Group 2 Format -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Choose Format"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="REQUIRED"
+                    android:padding="4dp"
+                    android:background="@drawable/text_round"
+                    android:layout_alignParentRight="true"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioGroup
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:paddingRight="5dp"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/rollo"
+                        android:text="Rollo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
-                    <TextView
-                        android:text="+$3"
-                        android:textSize="18sp"
-                        android:paddingTop="10dp"
+                    <RadioButton
+                        android:id="@+id/cortadas"
+                        android:text="Cortadas"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+                </RadioGroup>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
                     <TextView
-                        android:text="+$6"
+                        android:text="Precio x 2"
                         android:textSize="18sp"
-                        android:paddingTop="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:text="+$9"
-                        android:textSize="18sp"
-                        android:paddingTop="10dp"
+                        android:paddingTop="35dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
