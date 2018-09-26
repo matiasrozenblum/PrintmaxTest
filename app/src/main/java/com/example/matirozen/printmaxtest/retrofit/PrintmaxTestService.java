@@ -1,6 +1,8 @@
 package com.example.matirozen.printmaxtest.Retrofit;
 
 import com.example.matirozen.printmaxtest.BuildConfig;
+import com.example.matirozen.printmaxtest.Database.DataSource.CartRepository;
+import com.example.matirozen.printmaxtest.Database.Local.CartDatabase;
 import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
@@ -23,6 +25,10 @@ public class PrintmaxTestService {
     public static int metros = -1;
     public static int material = -1; //-1: no choice, 0: fasco, 1: saten, 2: poliamida, 3: saten negro
     public static int formato = -1; //'1: no choice, 0: cortadas, 1: en rollo
+
+    //Database
+    public static CartDatabase cartDatabase;
+    public static CartRepository cartRepository;
 
     public static PrintmaxTestService get() {
         if (INSTANCE == null) {

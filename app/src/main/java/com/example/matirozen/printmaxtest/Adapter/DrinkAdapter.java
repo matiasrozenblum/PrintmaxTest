@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,13 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
 import com.example.matirozen.printmaxtest.Interface.ItemClickListener;
 import com.example.matirozen.printmaxtest.Model.Drink;
 import com.example.matirozen.printmaxtest.R;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
+import com.fasterxml.jackson.annotation.JacksonAnnotation;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -164,7 +168,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     return;
                 }
 
-                showConfirmDialog(position, PrintmaxTestService.metros, PrintmaxTestService.material, PrintmaxTestService.formato);
+                showConfirmDialog(position, PrintmaxTestService.metros);
                 dialog.dismiss();
             }
         });
@@ -173,14 +177,14 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
     }
 
-    private void showConfirmDialog(int position, int metros, int material, int formato) {
+    private void showConfirmDialog(int position, final int metros) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View itemView = LayoutInflater.from(context)
                 .inflate(R.layout.confirm_add_to_cart_layout, null);
 
         //View
         ImageView imgProductDialog = (ImageView)itemView.findViewById(R.id.img_product);
-        TextView txtProductDialog = (TextView)itemView.findViewById(R.id.txt_cart_product_name);
+        final TextView txtProductDialog = (TextView)itemView.findViewById(R.id.txt_cart_product_name);
         TextView txtProductPrice = (TextView)itemView.findViewById(R.id.txt_cart_product_price);
         TextView txtMetros = (TextView)itemView.findViewById(R.id.txt_metros);
         TextView txtMaterial = (TextView)itemView.findViewById(R.id.txt_material);
@@ -220,11 +224,30 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         txtMaterial.setText(new StringBuilder("Material: ").append(mat));
         txtFormato.setText(new StringBuilder("Formato: ").append(form));
 
+        final double finalPrice = price;
         builder.setNegativeButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //Add to SQLite
                 dialogInterface.dismiss();
+                try {
+
+                    //Add to SQLite
+                    Cart cartItem = new Cart();
+                    cartItem.name = txtProductDialog.getText().toString();
+                    cartItem.metros = metros;
+                    cartItem.material = PrintmaxTestService.material;
+                    cartItem.formato = PrintmaxTestService.formato;
+                    cartItem.price = finalPrice;
+
+                    //Add to DB
+                    PrintmaxTestService.get().cartRepository.insertIntoCart(cartItem);
+                    Log.d("MATIROZEN_DEBUG", new Gson().toJson(cartItem));
+
+                    Toast.makeText(context, "Save item to cart success", Toast.LENGTH_SHORT).show();
+                } catch (Exception ex){
+                    Toast.makeText(context, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d("MATIROZEN_DEBUG", ex.getMessage());
+                }
             }
         });
 

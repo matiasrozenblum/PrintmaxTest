@@ -16,6 +16,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.matirozen.printmaxtest.Database.DataSource.CartRepository;
+import com.example.matirozen.printmaxtest.Database.Local.CartDataSource;
+import com.example.matirozen.printmaxtest.Database.Local.CartDatabase;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.User;
@@ -111,7 +114,14 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("ERROR", accountKitError.getErrorType().getMessage());
                 }
             });
+            //Init DB
+            initDB();
         }
+    }
+
+    private void initDB() {
+        PrintmaxTestService.cartDatabase = CartDatabase.getInstance(this);
+        PrintmaxTestService.cartRepository = CartRepository.getInstance(CartDataSource.getInstance(PrintmaxTestService.cartDatabase.cartDAO()));
     }
 
     private void startLoginPage(LoginType loginType) {
