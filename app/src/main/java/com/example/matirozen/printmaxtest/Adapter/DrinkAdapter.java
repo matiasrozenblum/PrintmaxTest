@@ -177,7 +177,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
     }
 
-    private void showConfirmDialog(int position, final int metros) {
+    private void showConfirmDialog(final int position, final int metros) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View itemView = LayoutInflater.from(context)
                 .inflate(R.layout.confirm_add_to_cart_layout, null);
@@ -238,6 +238,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     cartItem.material = PrintmaxTestService.material;
                     cartItem.formato = PrintmaxTestService.formato;
                     cartItem.price = finalPrice;
+                    cartItem.link = drinkList.get(position).link;
 
                     //Add to DB
                     PrintmaxTestService.get().cartRepository.insertIntoCart(cartItem);

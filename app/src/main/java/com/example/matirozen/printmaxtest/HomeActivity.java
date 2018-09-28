@@ -1,5 +1,6 @@
 package com.example.matirozen.printmaxtest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
@@ -31,6 +33,7 @@ import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.Drink;
 import com.example.matirozen.printmaxtest.Retrofit.IPrintmaxTestAPI;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import org.w3c.dom.Text;
 
@@ -50,11 +53,9 @@ public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView txtName, txtPhone;
-    SliderLayout sliderLayout;
     RecyclerView lst_drink;
-    TextView txt_banner_name;
-
-    RecyclerView lst_menu;
+    NotificationBadge badge;
+    ImageView cartIcon;
 
     //RxJava
     CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -136,8 +137,33 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.menu_action_bar, menu);
+        View view = menu.findItem(R.id.cartMenu).getActionView();
+        badge = (NotificationBadge)view.findViewById(R.id.badge);
+        cartIcon = (ImageView)view.findViewById(R.id.cartIcon);
+        cartIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, CartActivity.class));
+            }
+        });
+        updateCartCount();
         return true;
+    }
+
+    private void updateCartCount() {
+        if(badge == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(PrintmaxTestService.cartRepository.countCartItems() == 0){
+                    badge.setVisibility(View.INVISIBLE);
+                } else {
+                    badge.setVisibility(View.VISIBLE);
+                    badge.setText(String.valueOf(PrintmaxTestService.cartRepository.countCartItems()));
+                }
+            }
+        });
     }
 
     @Override
@@ -148,7 +174,7 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.cartMenu) {
             return true;
         }
 
@@ -178,5 +204,11 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateCartCount();
     }
 }
