@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.matirozen.printmaxtest.DrinkActivity;
+import com.example.matirozen.printmaxtest.HomeActivity;
 import com.example.matirozen.printmaxtest.Interface.ItemClickListener;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.R;
@@ -50,7 +51,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
                 PrintmaxTestService.currentCategory = categories.get(position);
 
                 //Start new activity
-                context.startActivity(new Intent(context, DrinkActivity.class));
+                context.startActivity(new Intent(context, HomeActivity.class));
             }
         });
     }

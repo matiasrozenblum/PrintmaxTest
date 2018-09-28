@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.matirozen.printmaxtest.Adapter.DrinkAdapter;
@@ -36,7 +37,7 @@ public class DrinkActivity extends AppCompatActivity {
         lst_drink.setHasFixedSize(true);
 
         txt_banner_name = (TextView)findViewById(R.id.txt_menu_name);
-        loadListDrink(PrintmaxTestService.currentCategory.id);
+        loadListDrink("6");
     }
 
     private void loadListDrink(String menuId) {
@@ -49,7 +50,7 @@ public class DrinkActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<List<Drink>> call, Throwable t) {
-
+                        Log.d("hola", "hola");
                     }
                 });
     }
