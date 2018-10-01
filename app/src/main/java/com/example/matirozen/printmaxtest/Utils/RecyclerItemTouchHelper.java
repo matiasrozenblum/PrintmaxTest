@@ -42,8 +42,10 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
-        View foregroundView = ((CartAdapter.CartViewHolder)viewHolder).viewForeground;
-        getDefaultUIUtil().onSelected(foregroundView);
+        if(viewHolder != null){
+            View foregroundView = ((CartAdapter.CartViewHolder)viewHolder).viewForeground;
+            getDefaultUIUtil().onSelected(foregroundView);
+        }
     }
 
     @Override
