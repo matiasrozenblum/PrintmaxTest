@@ -1,9 +1,11 @@
 package com.example.matirozen.printmaxtest;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +35,7 @@ import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.Drink;
 import com.example.matirozen.printmaxtest.Retrofit.IPrintmaxTestAPI;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
+import com.facebook.accountkit.AccountKit;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import org.w3c.dom.Text;
@@ -94,6 +97,7 @@ public class HomeActivity extends AppCompatActivity
         txtPhone = (TextView)headerView.findViewById(R.id.txtPhone);
 
         //Set info
+        Log.d("PATITA", PrintmaxTestService.currentUser.toString());
         txtName.setText(PrintmaxTestService.currentUser.getName());
         txtPhone.setText(PrintmaxTestService.currentUser.getPhone());
     }
@@ -187,18 +191,33 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_sign_out) {
+            // Create confirm dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Exit Application");
+            builder.setMessage("¿Esta seguro que quiere salir?");
 
-        } else if (id == R.id.nav_slideshow) {
+            builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    AccountKit.logOut();
 
-        } else if (id == R.id.nav_manage) {
+                    //Clear all activity
+                    Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
-        } else if (id == R.id.nav_share) {
+            builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
 
-        } else if (id == R.id.nav_send) {
-
+            builder.show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
@@ -50,10 +52,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         return cartList.size();
     }
 
-    class CartViewHolder extends RecyclerView.ViewHolder {
+    public class CartViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgProduct;
         TextView txtProductName, txtDetails, txtPrice;
+        public RelativeLayout viewBackground;
+        public LinearLayout viewForeground;
 
         public CartViewHolder(View itemView){
             super(itemView);
@@ -61,6 +65,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             txtProductName = (TextView) itemView.findViewById(R.id.txtProductName);
             txtDetails = (TextView)itemView.findViewById(R.id.txtDetails);
             txtPrice = (TextView)itemView.findViewById(R.id.txtPrice);
+            viewBackground = (RelativeLayout)itemView.findViewById(R.id.viewBackground);
+            viewForeground = (LinearLayout)itemView.findViewById(R.id.viewForeground);
         }
+    }
+    public void removeItem(int position){
+        cartList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Cart item, int position){
+        cartList.add(position, item);
+        notifyItemInserted(position);
     }
 }
