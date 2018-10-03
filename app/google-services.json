@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1048300427772",
+    "firebase_url": "https://printmaxtest.firebaseio.com",
+    "project_id": "printmaxtest",
+    "storage_bucket": "printmaxtest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048300427772:android:a2b8882937c40d99",
+        "android_client_info": {
+          "package_name": "com.example.matirozen.printmaxtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1048300427772-sqtr8o4dcqoreqlvsp8c0kbpd623rmka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.matirozen.printmaxtest",
+            "certificate_hash": "268358b5efbeef241605f9939099080451b39ab2"
+          }
+        },
+        {
+          "client_id": "1048300427772-j398knq7cu3jh7oaivn9o2gbfpp1sgjp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA9rTjodiFuYX6Vkoh2OEj2Y3v02kx2x4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1048300427772-j398knq7cu3jh7oaivn9o2gbfpp1sgjp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

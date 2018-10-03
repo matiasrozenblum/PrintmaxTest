@@ -39,4 +39,12 @@ public interface IPrintmaxTestAPI {
 
     @GET("getmenu.php")
     Call<List<Category>> getMenu();
+
+    @FormUrlEncoded
+    @POST("submitorder.php")
+    Call<String> submitOrder(@Field("price") float orderPrice,
+                             @Field("orderDetail") String orderDetail,
+                             @Field("comment") String comment,
+                             @Field("address") String address,
+                             @Field("phone") String phone);
 }

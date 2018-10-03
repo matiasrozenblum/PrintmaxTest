@@ -1,21 +1,31 @@
 package com.example.matirozen.printmaxtest;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.Adapter.CartAdapter;
 import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.example.matirozen.printmaxtest.Utils.RecyclerItemTouchHelper;
 import com.example.matirozen.printmaxtest.Utils.RecyclerItemTouchHelperListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +35,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CartActivity extends AppCompatActivity implements RecyclerItemTouchHelperListener {
 
@@ -49,8 +62,102 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         ItemTouchHelper.SimpleCallback simpleCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerCart);
         btnPlaceOrder = (Button)findViewById(R.id.btnPlaceOrder);
+        btnPlaceOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                placeOrder();
+            }
+        });
         rootLayout = (RelativeLayout)findViewById(R.id.rootLayout);
         loadCartItems();
+    }
+
+    private void placeOrder() {
+        //Create dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Submit order");
+        View submitOrderLayout = LayoutInflater.from(this).inflate(R.layout.submit_order_layout, null);
+        final EditText edtComment = submitOrderLayout.findViewById(R.id.edtComment);
+        final EditText edtOtherAddress = submitOrderLayout.findViewById(R.id.edtOtherAddress);
+        final RadioButton rdiUserAddress = submitOrderLayout.findViewById(R.id.rdiThisAddress);
+        final RadioButton rdiOtherAddress = submitOrderLayout.findViewById(R.id.rdiOtherAddress);
+
+        rdiUserAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    edtOtherAddress.setEnabled(false);
+            }
+        });
+
+        rdiOtherAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    edtOtherAddress.setEnabled(true);
+            }
+        });
+
+        builder.setView(submitOrderLayout);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                final String orderComment = edtComment.getText().toString();
+                final String orderAddress;
+                if(rdiUserAddress.isChecked()){
+                    orderAddress = PrintmaxTestService.currentUser.getAddress();
+                } else if(rdiOtherAddress.isChecked()){
+                    orderAddress = edtOtherAddress.getText().toString();
+                } else{
+                    orderAddress = "";
+                }
+
+                //Submit order
+                compositeDisposable.add(
+                        PrintmaxTestService.cartRepository.getCartItems()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Consumer<List<Cart>>() {
+                            @Override
+                            public void accept(List<Cart> carts) throws Exception {
+                                if(!TextUtils.isEmpty(orderAddress)){
+                                    sendOrderToServer(PrintmaxTestService.cartRepository.sumPrice(), carts, orderComment, orderAddress);
+                                } else{
+                                    Toast.makeText(CartActivity.this, "Order Address can't be empty", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                );
+            }
+        });
+        builder.show();
+    }
+
+    private void sendOrderToServer(float price, List<Cart> carts, String orderComment, String orderAddress) {
+        if(carts.size() > 0){
+            String orderDetail = new Gson().toJson(carts);
+
+            PrintmaxTestService.get().submitOrder(price, orderDetail, orderComment, orderAddress, PrintmaxTestService.currentUser.getPhone())
+                    .enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            Toast.makeText(CartActivity.this, "Order submitted", Toast.LENGTH_SHORT).show();
+
+                            //Clear cart
+                            PrintmaxTestService.cartRepository.emptyCart();
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Log.e("ERROR", t.getMessage());
+                        }
+                    });
+        }
     }
 
     private void loadCartItems() {

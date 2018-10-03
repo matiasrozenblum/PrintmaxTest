@@ -64,4 +64,8 @@ public class PrintmaxTestService {
     public Call<List<Drink>> getDrink(String menuId){
         return api.getDrink(menuId);
     }
+
+    public Call<String> submitOrder(float price, String detail, String comment, String address, String phone){
+        return api.submitOrder(price, detail, comment, address, phone);
+    }
 }
