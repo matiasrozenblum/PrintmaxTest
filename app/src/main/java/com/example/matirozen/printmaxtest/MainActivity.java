@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showRegisterDialog(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("REGISTER");
+        builder.setTitle("Registro");
 
         LayoutInflater inflater = this.getLayoutInflater();
         View registerLayout = inflater.inflate(R.layout.register_layout, null);
@@ -142,19 +142,19 @@ public class MainActivity extends AppCompatActivity {
                 final String phone = (edtPhone.getText() != null)? edtPhone.getText().toString() : null;
 
                 if(TextUtils.isEmpty(address)){
-                    Toast.makeText(MainActivity.this, "Please enter your address", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Ingrese su dirección", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(birth)){
-                    Toast.makeText(MainActivity.this, "Please enter your birth", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Ingrese su fecha de nacimiento", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(name)){
-                    Toast.makeText(MainActivity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Ingrese su nombre", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(phone)){
-                    Toast.makeText(MainActivity.this, "Please enter your phone", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Ingrese su telefono", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
                                     PrintmaxTestService.currentUser = response.body();
                                     Log.d("MATIROZEN_DEBUG", new Gson().toJson(userDB));
 
-                                    Toast.makeText(MainActivity.this, "Save item to cart success", Toast.LENGTH_SHORT).show();
                                 } catch (Exception ex){
                                     Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                                     Log.d("MATIROZEN_DEBUG", ex.getMessage());

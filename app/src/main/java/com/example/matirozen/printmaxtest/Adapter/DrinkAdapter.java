@@ -156,15 +156,15 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(PrintmaxTestService.metros == -1){
-                    Toast.makeText(context, "Please enter metros", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Ingrese metros", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(PrintmaxTestService.material == -1){
-                    Toast.makeText(context, "Please enter material", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Ingrese material", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(PrintmaxTestService.formato == -1){
-                    Toast.makeText(context, "Please enter formato", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Ingrese formato", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -244,7 +244,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     PrintmaxTestService.get().cartRepository.insertIntoCart(cartItem);
                     Log.d("MATIROZEN_DEBUG", new Gson().toJson(cartItem));
 
-                    Toast.makeText(context, "Save item to cart success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Enviado al carrito", Toast.LENGTH_SHORT).show();
                 } catch (Exception ex){
                     Toast.makeText(context, ex.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d("MATIROZEN_DEBUG", ex.getMessage());
