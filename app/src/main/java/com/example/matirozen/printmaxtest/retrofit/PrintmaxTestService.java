@@ -2,7 +2,9 @@ package com.example.matirozen.printmaxtest.Retrofit;
 
 import com.example.matirozen.printmaxtest.BuildConfig;
 import com.example.matirozen.printmaxtest.Database.DataSource.CartRepository;
+import com.example.matirozen.printmaxtest.Database.DataSource.UserRepository;
 import com.example.matirozen.printmaxtest.Database.Local.CartDatabase;
+import com.example.matirozen.printmaxtest.Database.Local.UserDatabase;
 import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
@@ -27,6 +29,8 @@ public class PrintmaxTestService {
     public static int formato = -1; //'1: no choice, 0: cortadas, 1: en rollo
 
     //Database
+    public static UserDatabase userDatabase;
+    public static UserRepository userRepository;
     public static CartDatabase cartDatabase;
     public static CartRepository cartRepository;
 

@@ -17,8 +17,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.Database.DataSource.CartRepository;
+import com.example.matirozen.printmaxtest.Database.DataSource.UserRepository;
 import com.example.matirozen.printmaxtest.Database.Local.CartDataSource;
 import com.example.matirozen.printmaxtest.Database.Local.CartDatabase;
+import com.example.matirozen.printmaxtest.Database.Local.UserDataSource;
+import com.example.matirozen.printmaxtest.Database.Local.UserDatabase;
+import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
+import com.example.matirozen.printmaxtest.Database.ModelDB.UserDB;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.User;
@@ -31,6 +36,7 @@ import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
+import com.google.gson.Gson;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.szagurskii.patternedtextwatcher.PatternedTextWatcher;
 
@@ -53,16 +59,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initDB();
         btnContinue = findViewById(R.id.btn_continue);
         btnContinue.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startLoginPage(LoginType.PHONE);
+                if(PrintmaxTestService.userRepository.getUser() != null){
+                    PrintmaxTestService.get().getUserInformation(PrintmaxTestService.userRepository.getUser().phone)
+                            .enqueue(new Callback<User>() {
+                                @Override
+                                public void onResponse(Call<User> call, Response<User> response) {
+                                    //If User already exists, just start new Activity
+                                    PrintmaxTestService.currentUser = response.body();
+                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(Call<User> call, Throwable t) {
+                                    Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    showRegisterDialog();
+                }
             }
         });
 
+
         //Check session
-        if(AccountKit.getCurrentAccessToken() != null){
+        /*if(AccountKit.getCurrentAccessToken() != null){
             final android.app.AlertDialog alertDialog = new SpotsDialog(MainActivity.this);
             alertDialog.show();
             alertDialog.setMessage("Please waiting...");
@@ -116,10 +142,12 @@ public class MainActivity extends AppCompatActivity {
             });
             //Init DB
             initDB();
-        }
+        }*/
     }
 
     private void initDB() {
+        PrintmaxTestService.userDatabase = UserDatabase.getInstance(this);
+        PrintmaxTestService.userRepository = UserRepository.getInstance(UserDataSource.getInstance(PrintmaxTestService.userDatabase.userDAO()));
         PrintmaxTestService.cartDatabase = CartDatabase.getInstance(this);
         PrintmaxTestService.cartRepository = CartRepository.getInstance(CartDataSource.getInstance(PrintmaxTestService.cartDatabase.cartDAO()));
     }
@@ -134,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE){
+        /*if(requestCode == REQUEST_CODE){
             if (data == null){
                 return;
             }
@@ -200,10 +228,10 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
             }
-        }
+        }*/
     }
 
-    private void showRegisterDialog(final String phone){
+    private void showRegisterDialog(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("REGISTER");
 
@@ -211,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
         View registerLayout = inflater.inflate(R.layout.register_layout, null);
 
         final MaterialEditText edtName = registerLayout.findViewById(R.id.edt_name);
+        final MaterialEditText edtPhone = registerLayout.findViewById(R.id.edt_phone);
         final MaterialEditText edtAddress = registerLayout.findViewById(R.id.edt_address);
         final MaterialEditText edtBirth = registerLayout.findViewById(R.id.edt_birth);
 
@@ -234,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 String address = (edtAddress.getText() != null)? edtAddress.getText().toString() : null;
                 String birth = (edtBirth.getText() != null)? edtBirth.getText().toString() : null;
                 String name = (edtName.getText() != null)? edtName.getText().toString() : null;
+                final String phone = (edtPhone.getText() != null)? edtPhone.getText().toString() : null;
 
                 if(TextUtils.isEmpty(address)){
                     Toast.makeText(MainActivity.this, "Please enter your address", Toast.LENGTH_SHORT).show();
@@ -247,6 +277,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(TextUtils.isEmpty(phone)){
+                    Toast.makeText(MainActivity.this, "Please enter your phone", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 PrintmaxTestService.get().registerNewUser(phone, name, address, birth)
                     .enqueue(new Callback<User>() {
@@ -256,6 +290,23 @@ public class MainActivity extends AppCompatActivity {
 
                             if (response.isSuccessful()){
                                 User user = response.body();
+                                try {
+
+                                    //Add to SQLite
+                                    UserDB userDB = new UserDB();
+                                    final String userPhone = phone;
+                                    userDB.phone = userPhone;
+
+                                    //Add to DB
+                                    PrintmaxTestService.userRepository.insertIntoUser(userDB);
+                                    PrintmaxTestService.currentUser = response.body();
+                                    Log.d("MATIROZEN_DEBUG", new Gson().toJson(userDB));
+
+                                    Toast.makeText(MainActivity.this, "Save item to cart success", Toast.LENGTH_SHORT).show();
+                                } catch (Exception ex){
+                                    Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Log.d("MATIROZEN_DEBUG", ex.getMessage());
+                                }
                                 //Aca en vez de preguntar por el error_msg del user preguntas por el isSuccessful
                                 //y si no intentas de mapearlo a otro objeto usando el boject mapper
                                 //Ej:  RetrofitClient.obtainMapper().readValue(response.errorBody().byteStream(), Error.class);
