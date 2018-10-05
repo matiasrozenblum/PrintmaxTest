@@ -37,7 +37,7 @@
 
             <TextView
                 android:layout_weight="2"
-                android:text="Price"
+                android:text="Precio"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -57,7 +57,7 @@
         
         <Button
             android:id="@+id/btn_add_to_cart"
-            android:text="Add to cart"
+            android:text="Agregar al carrito"
             android:layout_gravity="center_horizontal"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"

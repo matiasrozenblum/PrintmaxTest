@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                //Check session
                 if(PrintmaxTestService.userRepository.getUser() != null){
                     PrintmaxTestService.get().getUserInformation(PrintmaxTestService.userRepository.getUser().phone)
                             .enqueue(new Callback<User>() {
@@ -85,64 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        //Check session
-        /*if(AccountKit.getCurrentAccessToken() != null){
-            final android.app.AlertDialog alertDialog = new SpotsDialog(MainActivity.this);
-            alertDialog.show();
-            alertDialog.setMessage("Please waiting...");
-            //Auto login
-            AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
-                @Override
-                public void onSuccess(final Account account) {
-                    PrintmaxTestService.get().checkIfUserExists(account.getPhoneNumber().toString())
-                            .enqueue(new Callback<CheckUserResponse>() {
-                                @Override
-                                public void onResponse(Call<CheckUserResponse> call, Response<CheckUserResponse> response) {
-                                    alertDialog.dismiss();
-                                    if (!response.isSuccessful()){
-                                        return;
-                                    }
-                                    CheckUserResponse userResponse = response.body();
-                                    if(userResponse.isExists()){
-                                        //Fetch information
-                                        PrintmaxTestService.get().getUserInformation(account.getPhoneNumber().toString())
-                                                .enqueue(new Callback<User>() {
-                                                    @Override
-                                                    public void onResponse(Call<User> call, Response<User> response) {
-                                                        //If User already exists, just start new Activity
-                                                        PrintmaxTestService.currentUser = response.body();
-                                                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                                                        finish();
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Call<User> call, Throwable t) {
-                                                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-
-                                    } else {
-                                        showRegisterDialog(account.getPhoneNumber().toString());
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<CheckUserResponse> call, Throwable t) {
-                                    Log.d("hola", "hola");
-                                }
-                            });
-                }
-
-                @Override
-                public void onError(AccountKitError accountKitError) {
-                    Log.d("ERROR", accountKitError.getErrorType().getMessage());
-                }
-            });
-            //Init DB
-            initDB();
-        }*/
     }
 
     private void initDB() {
@@ -162,73 +105,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /*if(requestCode == REQUEST_CODE){
-            if (data == null){
-                return;
-            }
-            AccountKitLoginResult result = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
-
-            if(result.getError() != null){
-                Toast.makeText(this, ""+result.getError().getErrorType().getMessage(), Toast.LENGTH_SHORT).show();
-            } else if(result.wasCancelled()){
-                Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
-            } else {
-                if(result.getAccessToken() != null){
-                    final android.app.AlertDialog alertDialog = new SpotsDialog(MainActivity.this);
-                    alertDialog.show();
-                    alertDialog.setMessage("Please waiting...");
-
-                    //Get user phone and check exists on server
-                    AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
-                        @Override
-                        public void onSuccess(final Account account) {
-                            PrintmaxTestService.get().checkIfUserExists(account.getPhoneNumber().toString())
-                                    .enqueue(new Callback<CheckUserResponse>() {
-                                        @Override
-                                        public void onResponse(Call<CheckUserResponse> call, Response<CheckUserResponse> response) {
-                                            alertDialog.dismiss();
-                                            if (!response.isSuccessful()){
-                                                return;
-                                            }
-                                            CheckUserResponse userResponse = response.body();
-                                            if(userResponse.isExists()){
-                                                //Fetch information
-                                                PrintmaxTestService.get().getUserInformation(account.getPhoneNumber().toString())
-                                                        .enqueue(new Callback<User>() {
-                                                            @Override
-                                                            public void onResponse(Call<User> call, Response<User> response) {
-                                                                //If User already exists, just start new Activity
-                                                                PrintmaxTestService.currentUser = response.body();
-                                                                startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                                                                finish();
-                                                            }
-
-                                                            @Override
-                                                            public void onFailure(Call<User> call, Throwable t) {
-                                                                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-
-                                            } else {
-                                                showRegisterDialog(account.getPhoneNumber().toString());
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<CheckUserResponse> call, Throwable t) {
-                                            Log.d("hola", "hola");
-                                        }
-                                    });
-                        }
-
-                        @Override
-                        public void onError(AccountKitError accountKitError) {
-                            Log.d("ERROR", accountKitError.getErrorType().getMessage());
-                        }
-                    });
-                }
-            }
-        }*/
     }
 
     private void showRegisterDialog(){
@@ -342,21 +218,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void printKeyHash() {
-        try{
-            PackageInfo info = getPackageManager().getPackageInfo("com.example.matirozen.printmaxtest",
-                    PackageManager.GET_SIGNATURES);
-            for(Signature signature:info.signatures){
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KEYHASH", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
     }
 }

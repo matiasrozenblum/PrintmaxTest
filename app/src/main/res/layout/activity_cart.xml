@@ -12,7 +12,7 @@
     
     <Button
         android:id="@+id/btnPlaceOrder"
-        android:text="Place Order"
+        android:text="Enviar orden
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

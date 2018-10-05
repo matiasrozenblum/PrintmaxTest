@@ -75,7 +75,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
     private void placeOrder() {
         //Create dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Submit order");
+        builder.setTitle("Enviar orden");
         View submitOrderLayout = LayoutInflater.from(this).inflate(R.layout.submit_order_layout, null);
         final EditText edtComment = submitOrderLayout.findViewById(R.id.edtComment);
         final EditText edtOtherAddress = submitOrderLayout.findViewById(R.id.edtOtherAddress);
@@ -99,7 +99,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         });
 
         builder.setView(submitOrderLayout);
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -146,7 +146,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
                     .enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
-                            Toast.makeText(CartActivity.this, "Order submitted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CartActivity.this, "Orden enviada", Toast.LENGTH_SHORT).show();
 
                             //Clear cart
                             PrintmaxTestService.cartRepository.emptyCart();
@@ -211,7 +211,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
             //Delete item from Room database
             PrintmaxTestService.cartRepository.deleteCartItem(deletedItem);
 
-            Snackbar snackbar = Snackbar.make(rootLayout, new StringBuilder(name).append(" removed from cart list").toString(), Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(rootLayout, new StringBuilder(name).append(" removido del carrito").toString(), Snackbar.LENGTH_LONG);
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

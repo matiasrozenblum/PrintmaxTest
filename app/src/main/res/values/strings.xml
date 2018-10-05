@@ -3,12 +3,12 @@
     <string name="FACEBOOK_APP_ID">2188154584806973</string>
     <string name="ACCOUNT_KIT_CLIENT_TOKEN">c4d70ee3725b58c2e449467f897c23e9</string>
 
-    <string name="main_activity_button">Continue</string>
-    <string name="register_layout_name_hint">Name</string>
-    <string name="register_layout_address_hint">Address</string>
+    <string name="main_activity_button">Contiunar</string>
+    <string name="register_layout_name_hint">Nombre</string>
+    <string name="register_layout_address_hint">Dirección</string>
     <string name="register_layout_birth_hint">yyyy-mm-dd</string>
-    <string name="register_layout_button">Register</string>
-    <string name="title_activity_home">HomeActivity</string>
+    <string name="register_layout_button">Registrarse</string>
+    <string name="title_activity_home">Printmax</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

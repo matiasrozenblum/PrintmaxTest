@@ -30,7 +30,7 @@
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/edt_phone"
-                android:hint="Phone"
+                android:hint="Telefono"
                 android:digits="1234567890+"
                 android:textSize="12sp"
                 android:inputType="text"
