@@ -34,6 +34,8 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
     Context context;
     List<Drink> drinkList;
+    String[] material = {"fasco", "saten", "poliamida", "saten negro", "saten marfil", "saten autoadhesivo", "algodon", "alta definicion", "tafeta"};
+    String[] presentacion = {"rollo", "cortadas"};
 
     public DrinkAdapter(Context context, List<Drink> drinkList) {
         this.context = context;
@@ -188,41 +190,18 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         TextView txtProductPrice = (TextView)itemView.findViewById(R.id.txt_cart_product_price);
         TextView txtMetros = (TextView)itemView.findViewById(R.id.txt_metros);
         TextView txtMaterial = (TextView)itemView.findViewById(R.id.txt_material);
-        TextView txtFormato = (TextView)itemView.findViewById(R.id.txt_formato);
+        TextView txtPres = (TextView)itemView.findViewById(R.id.txtPres);
 
         Picasso.with(context).load(drinkList.get(position).link).into(imgProductDialog);
         txtProductDialog.setText(new StringBuilder(drinkList.get(position).name).toString());
         txtMetros.setText(new StringBuilder().append(PrintmaxTestService.metros).append(" metros").toString());
-        String mat = "";
-        String form = "";
+        String mat = material[PrintmaxTestService.material];
+        String pres = presentacion[PrintmaxTestService.formato];
 
         double price = (Double.parseDouble(drinkList.get(position).price)* metros);
-        switch (PrintmaxTestService.material){
-            case 0:
-                mat = "fasco";
-            case 1:
-                mat = "Saten";
-                price *= 2;
-                break;
-            case 2:
-                mat = "poliamida";
-                price *= 4;
-                break;
-            case 3:
-                mat = "Saten negro";
-                price *= 6;
-                break;
-        }
-        switch (PrintmaxTestService.formato){
-            case 0:
-                form = "Rollo";
-            case 1:
-                form = "Cortadas";
-                price *= 2;
-        }
         txtProductPrice.setText(new StringBuilder("$").append(price).toString());
         txtMaterial.setText(new StringBuilder("Material: ").append(mat));
-        txtFormato.setText(new StringBuilder("Formato: ").append(form));
+        txtPres.setText(new StringBuilder("Presentacion: ").append(pres));
 
         final double finalPrice = price;
         builder.setNegativeButton("Confirm", new DialogInterface.OnClickListener() {

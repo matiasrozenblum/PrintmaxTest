@@ -3,7 +3,7 @@
     <string name="FACEBOOK_APP_ID">2188154584806973</string>
     <string name="ACCOUNT_KIT_CLIENT_TOKEN">c4d70ee3725b58c2e449467f897c23e9</string>
 
-    <string name="main_activity_button">Contiunar</string>
+    <string name="main_activity_button">Continuar</string>
     <string name="register_layout_name_hint">Nombre</string>
     <string name="register_layout_address_hint">Dirección</string>
     <string name="register_layout_birth_hint">yyyy-mm-dd</string>

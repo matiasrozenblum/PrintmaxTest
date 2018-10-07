@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String currentDBPath = getDatabasePath("UserDB").getAbsolutePath();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

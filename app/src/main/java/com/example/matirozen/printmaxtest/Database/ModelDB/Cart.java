@@ -19,8 +19,11 @@ public class Cart {
     @ColumnInfo(name = "link")
     public String link;
 
-    @ColumnInfo(name = "metros")
+    @ColumnInfo(name = "cantidad")
     public int metros;
+
+    @ColumnInfo(name = "magnitud")
+    public String magnitud;
 
     @ColumnInfo(name = "price")
     public double price;
