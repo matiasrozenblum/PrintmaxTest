@@ -10,15 +10,15 @@ import com.example.matirozen.printmaxtest.Database.ModelDB.UserDB;
 
 @Dao
 public interface UserDAO {
-    @Query("SELECT * FROM UserDB")
-    UserDB getUser();
+    @Query("SELECT * FROM `UserDB`")
+    UserDB getUserDB();
 
     @Insert
-    void insertIntoUser(UserDB...Users);
+    void insertIntoUserDB(UserDB...Users);
 
     @Update
-    void updateUser(UserDB...Users);
+    void updateUserDB(UserDB...Users);
 
     @Delete
-    void deleteUserItem(UserDB user);
+    void deleteUserItemDB(UserDB user);
 }

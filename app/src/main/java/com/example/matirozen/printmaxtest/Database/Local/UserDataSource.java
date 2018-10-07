@@ -20,22 +20,22 @@ public class UserDataSource implements IUserDataSource {
     }
 
     @Override
-    public UserDB getUser() {
-        return userDAO.getUser();
+    public UserDB getUserDB() {
+        return userDAO.getUserDB();
     }
 
     @Override
-    public void insertIntoUser(UserDB...Users) {
-        userDAO.insertIntoUser(Users);
+    public void insertIntoUserDB(UserDB...Users) {
+        userDAO.insertIntoUserDB(Users);
     }
 
     @Override
-    public void updateUser(UserDB...Users) {
-        userDAO.updateUser(Users);
+    public void updateUserDB(UserDB...Users) {
+        userDAO.updateUserDB(Users);
     }
 
     @Override
-    public void deleteUserItem(UserDB user) {
-        userDAO.deleteUserItem(user);
+    public void deleteUserItemDB(UserDB user) {
+        userDAO.deleteUserItemDB(user);
     }
 }

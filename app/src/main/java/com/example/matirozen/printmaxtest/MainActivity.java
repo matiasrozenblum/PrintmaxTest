@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String currentDBPath = getDatabasePath("UserDB").getAbsolutePath();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -65,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 //Check session
-                if(PrintmaxTestService.userRepository.getUser() != null){
-                    PrintmaxTestService.get().getUserInformation(PrintmaxTestService.userRepository.getUser().phone)
+                if(PrintmaxTestService.userRepository.getUserDB() != null){
+                    PrintmaxTestService.get().getUserInformation(PrintmaxTestService.userRepository.getUserDB().phone)
                             .enqueue(new Callback<User>() {
                                 @Override
                                 public void onResponse(Call<User> call, Response<User> response) {
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                                     userDB.phone = userPhone;
 
                                     //Add to DB
-                                    PrintmaxTestService.userRepository.insertIntoUser(userDB);
+                                    PrintmaxTestService.userRepository.insertIntoUserDB(userDB);
                                     PrintmaxTestService.currentUser = response.body();
                                     Log.d("MATIROZEN_DEBUG", new Gson().toJson(userDB));
 

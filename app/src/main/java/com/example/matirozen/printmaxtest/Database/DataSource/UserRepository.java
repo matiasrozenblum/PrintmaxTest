@@ -18,22 +18,22 @@ public class UserRepository implements IUserDataSource {
     }
 
     @Override
-    public UserDB getUser() {
-        return iUserDataSource.getUser();
+    public UserDB getUserDB() {
+        return iUserDataSource.getUserDB();
     }
 
     @Override
-    public void insertIntoUser(UserDB... Users) {
-        iUserDataSource.insertIntoUser(Users);
+    public void insertIntoUserDB(UserDB... Users) {
+        iUserDataSource.insertIntoUserDB(Users);
     }
 
     @Override
-    public void updateUser(UserDB... Users) {
-        iUserDataSource.updateUser(Users);
+    public void updateUserDB(UserDB... Users) {
+        iUserDataSource.updateUserDB(Users);
     }
 
     @Override
-    public void deleteUserItem(UserDB user) {
-        iUserDataSource.deleteUserItem(user);
+    public void deleteUserItemDB(UserDB user) {
+        iUserDataSource.deleteUserItemDB(user);
     }
 }
