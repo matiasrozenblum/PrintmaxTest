@@ -3,19 +3,16 @@ package com.example.matirozen.printmaxtest;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.matirozen.printmaxtest.Adapter.DrinkAdapter;
-import com.example.matirozen.printmaxtest.Database.DataSource.CartRepository;
-import com.example.matirozen.printmaxtest.Database.Local.CartDataSource;
-import com.example.matirozen.printmaxtest.Database.Local.CartDatabase;
-import com.example.matirozen.printmaxtest.Model.Banner;
+import com.example.matirozen.printmaxtest.Adapter.BordadasAdapter;
+import com.example.matirozen.printmaxtest.Adapter.EstampadasAdapter;
 import com.example.matirozen.printmaxtest.Model.Drink;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,7 +53,13 @@ public class DrinkActivity extends AppCompatActivity {
     }
 
     private void displayDrinkList(List<Drink> drinks) {
-        DrinkAdapter adapter = new DrinkAdapter(this, drinks);
-        lst_drink.setAdapter(adapter);
+        List<Drink> bordadas = new ArrayList<>();
+        bordadas.set(0, drinks.get(0));
+        List<Drink> estampadas = new ArrayList<>();
+        estampadas.set(0, drinks.get(1));
+        BordadasAdapter bordadasAdapter = new BordadasAdapter(this, bordadas);
+        EstampadasAdapter estampadasAdapter = new EstampadasAdapter(this, estampadas);
+        lst_drink.setAdapter(bordadasAdapter);
+        lst_drink.setAdapter(estampadasAdapter);
     }
 }

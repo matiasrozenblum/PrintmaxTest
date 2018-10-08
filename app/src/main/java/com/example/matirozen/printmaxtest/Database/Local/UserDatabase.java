@@ -14,7 +14,7 @@ public abstract  class UserDatabase extends RoomDatabase {
     public abstract UserDAO userDAO();
     public static UserDatabase instance;
 
-    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+    static final Migration MIGRATION_2_3 = new Migration(4, 3) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             // Since we didn't alter the table, there's nothing else to do here.

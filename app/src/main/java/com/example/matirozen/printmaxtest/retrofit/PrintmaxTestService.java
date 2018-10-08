@@ -24,9 +24,13 @@ public class PrintmaxTestService {
     public static User currentUser = null;
     public static Category currentCategory = null;
 
-    public static int metros = -1;
+    public static int cantidad = -1;
+    public static String unidad = "";
     public static int material = -1; //-1: no choice, 0: fasco, 1: saten, 2: poliamida, 3: saten negro
-    public static int formato = -1; //'1: no choice, 0: cortadas, 1: en rollo
+    public static int presentacion = -1; //'1: no choice, 0: cortadas, 1: en rollo
+    public static int ancho = -1;
+    public static int largo = -1;
+    public static int colores = -1;
 
     //Database
     public static UserDatabase userDatabase;

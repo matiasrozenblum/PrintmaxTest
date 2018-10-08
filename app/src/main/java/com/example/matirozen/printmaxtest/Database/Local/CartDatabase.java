@@ -9,15 +9,17 @@ import android.content.Context;
 
 import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
 
-@Database(entities = {Cart.class}, version = 2)
+@Database(entities = {Cart.class}, version = 4)
 public abstract  class CartDatabase extends RoomDatabase {
     public abstract CartDAO cartDAO();
     public static CartDatabase instance;
 
-    static final Migration MIGRATION_3_2 = new Migration(3, 2) {
+    static final Migration MIGRATION_2_3 = new Migration(3, 4) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            // Since we didn't alter the table, there's nothing else to do here.
+            database.execSQL("CREATE TABLE cart_new (id INTEGER NOT NULL, name TEXT, link TEXT, cantidad INTEGER NOT NULL, unidad TEXT, price REAL NOT NULL, material INTEGER NOT NULL, ancho INTEGER NOT NULL, largo INTEGER NOT NULL, colores INTEGER NOT NULL, presentacion INTEGER NOT NULL, PRIMARY KEY(id))");
+            database.execSQL("DROP TABLE Cart");
+            database.execSQL("ALTER TABLE cart_new RENAME TO Cart");
         }
     };
 
@@ -25,7 +27,7 @@ public abstract  class CartDatabase extends RoomDatabase {
         if(instance == null){
             instance = Room.databaseBuilder(context, CartDatabase.class, "PrintmaxTEST")
                     .allowMainThreadQueries()
-                    .addMigrations(MIGRATION_3_2)
+                    .addMigrations(MIGRATION_2_3)
                     .build();
         }
         return instance;

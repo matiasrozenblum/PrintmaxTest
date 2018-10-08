@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 @Entity(tableName = "Cart")
 public class Cart {
@@ -13,24 +14,42 @@ public class Cart {
     @ColumnInfo(name = "id")
     public int id;
 
+    @Nullable
     @ColumnInfo(name = "name")
     public String name;
 
+    @Nullable
     @ColumnInfo(name = "link")
     public String link;
 
+    @Nullable
     @ColumnInfo(name = "cantidad")
-    public int metros;
+    public int cantidad;
 
-    @ColumnInfo(name = "magnitud")
-    public String magnitud;
+    @Nullable
+    @ColumnInfo(name = "unidad")
+    public String unidad;
 
+    @Nullable
     @ColumnInfo(name = "price")
     public double price;
 
     @ColumnInfo(name = "material")
     public int material;
 
-    @ColumnInfo(name = "formato")
-    public int formato;
+    @Nullable
+    @ColumnInfo(name = "ancho")
+    public int ancho;
+
+    @Nullable
+    @ColumnInfo(name = "largo")
+    public int largo;
+
+    @Nullable
+    @ColumnInfo(name = "colores")
+    public int colores;
+
+    @Nullable
+    @ColumnInfo(name = "presentacion")
+    public int presentacion;
 }

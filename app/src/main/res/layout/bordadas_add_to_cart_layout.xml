@@ -73,8 +73,8 @@
                 android:layout_height="wrap_content" />
 
             <RadioButton
-                android:id="@+id/Unidades"
-                android:text="Cortadas"
+                android:id="@+id/rbUnidades"
+                android:text="Unidades"
                 android:layout_weight="1"
                 android:layout_gravity="right"
                 android:layout_width="wrap_content"
@@ -138,48 +138,6 @@
                 android:layout_height="wrap_content">
 
                 <RadioButton
-                    android:id="@+id/fasco"
-                    android:text="Fasco"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <RadioButton
-                    android:id="@+id/saten"
-                    android:text="Saten"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <RadioButton
-                    android:id="@+id/poliamida"
-                    android:text="Poliamida"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <RadioButton
-                    android:id="@+id/satenNegro"
-                    android:text="Saten negro"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <RadioButton
-                    android:id="@+id/satenMarfil"
-                    android:text="Saten marfil"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <RadioButton
-                    android:id="@+id/satenAutoadhesivo"
-                    android:text="Saten autoadhesivo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <RadioButton
-                    android:id="@+id/algodon"
-                    android:text="Algodon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <RadioButton
                     android:id="@+id/altaDefinicion"
                     android:text="Alta definicion"
                     android:layout_width="wrap_content"
@@ -190,6 +148,7 @@
                     android:text="Tafeta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
             </RadioGroup>
             </RelativeLayout>
 
@@ -223,24 +182,29 @@
 
                 <RadioGroup
                     android:orientation="vertical"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:paddingRight="5dp"
                     android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/edtAncho"
-                        android:background="@android:color/white"
-                        android:hint="10 a 100 mm"
-                        android:inputType="number"
-                        android:layout_margin="8dp"
-                        android:padding="4dp"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:text="Alto"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:prompt="@string/ancho"
+                        />
+
 
                     <EditText
                         android:id="@+id/edtLargo"
                         android:background="@android:color/white"
-                        android:hint="30 a 9999 mm"
+                        android:hint="Ancho"
                         android:inputType="number"
                         android:layout_margin="8dp"
                         android:padding="4dp"
@@ -290,7 +254,7 @@
                         android:layout_height="wrap_content" />
 
                     <RadioButton
-                        android:id="@+id/dosCOlores"
+                        android:id="@+id/dosColores"
                         android:text="2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -304,54 +268,6 @@
                     <RadioButton
                         android:id="@+id/cuatroColores"
                         android:text="4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </RadioGroup>
-            </RelativeLayout>
-
-            <!-- Group 4 Escalas cantidad -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:text="Presentacion"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:text="REQUERIDO"
-                    android:padding="4dp"
-                    android:background="@drawable/text_round"
-                    android:layout_alignParentRight="true"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
-            <RelativeLayout
-                android:background="@android:color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <RadioGroup
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:paddingRight="5dp"
-                    android:layout_height="wrap_content">
-
-                    <RadioButton
-                        android:id="@+id/rollo"
-                        android:text="Rollo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <RadioButton
-                        android:id="@+id/cortadas"
-                        android:text="Cortadas"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </RadioGroup>
@@ -383,7 +299,8 @@
             <RelativeLayout
                 android:background="@android:color/white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
 
                 <RadioGroup
                     android:orientation="vertical"

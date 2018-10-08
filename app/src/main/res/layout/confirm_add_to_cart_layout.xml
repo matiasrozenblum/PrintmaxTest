@@ -60,10 +60,30 @@
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/txtTam"
+                        android:text="100 mm x 100 mm"
+                        android:layout_gravity="right"
+                        android:paddingRight="10dp"
+                        android:textSize="14sp"
+                        android:textStyle="italic"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/txtColores"
+                        android:text="colores: 1"
+                        android:layout_gravity="right"
+                        android:paddingRight="10dp"
+                        android:textSize="14sp"
+                        android:textStyle="italic"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:id="@+id/txtPres"
-                        android:text="Formato: rollo"
+                        android:text="Presentacion: rollo"
                         android:layout_gravity="right"
                         android:paddingRight="10dp"
                         android:textSize="14sp"

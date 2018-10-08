@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -22,32 +21,16 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.example.matirozen.printmaxtest.Adapter.CategoryAdapter;
-import com.example.matirozen.printmaxtest.Adapter.DrinkAdapter;
-import com.example.matirozen.printmaxtest.Database.DataSource.CartRepository;
-import com.example.matirozen.printmaxtest.Database.Local.CartDataSource;
-import com.example.matirozen.printmaxtest.Database.Local.CartDatabase;
-import com.example.matirozen.printmaxtest.Model.Banner;
-import com.example.matirozen.printmaxtest.Model.Category;
+import com.example.matirozen.printmaxtest.Adapter.BordadasAdapter;
+import com.example.matirozen.printmaxtest.Adapter.TypeAdapter;
 import com.example.matirozen.printmaxtest.Model.Drink;
-import com.example.matirozen.printmaxtest.Retrofit.IPrintmaxTestAPI;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.facebook.accountkit.AccountKit;
 import com.nex3z.notificationbadge.NotificationBadge;
 
-import org.w3c.dom.Text;
-
-import java.util.HashMap;
 import java.util.List;
 
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -118,7 +101,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void displayDrinkList(List<Drink> drinks) {
-        DrinkAdapter adapter = new DrinkAdapter(this, drinks);
+        TypeAdapter adapter = new TypeAdapter(this, drinks);
         lst_drink.setAdapter(adapter);
     }
 

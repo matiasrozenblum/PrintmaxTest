@@ -41,10 +41,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 .into(holder.imgProduct);
         holder.txtProductName.setText(cartList.get(position).name);
         holder.txtPrice.setText(new StringBuilder("$").append(cartList.get(position).price));
-        holder.txtDetails.setText(new StringBuilder("Metros: ")
-                .append(cartList.get(position).metros).append("\n")
+        holder.txtDetails.setText(new StringBuilder("Cantidad: ")
+                .append(cartList.get(position).cantidad).append(cartList.get(position).unidad).append("\n")
                 .append("Material:").append(cartList.get(position).material).append("\n")
-                .append("Formato:").append(cartList.get(position).formato).append("\n").toString());
+                .append("Tamaño: ").append(cartList.get(position).ancho).append(" mm x ").append(cartList.get(position).largo).append(" mm").append("\n")
+                .append("Colores: ").append(cartList.get(position).colores)
+                .append("Presentacion:").append(cartList.get(position).presentacion).append("\n").toString());
     }
 
     @Override
