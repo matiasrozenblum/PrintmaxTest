@@ -4,10 +4,12 @@ import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.Drink;
+import com.example.matirozen.printmaxtest.Model.Price;
 import com.example.matirozen.printmaxtest.Model.User;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -47,4 +49,8 @@ public interface IPrintmaxTestAPI {
                              @Field("comment") String comment,
                              @Field("address") String address,
                              @Field("phone") String phone);
+
+    @FormUrlEncoded
+    @POST("getprice.php")
+    Call<Price> getPrice(@Field("code") String code);
 }

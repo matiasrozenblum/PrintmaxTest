@@ -80,7 +80,6 @@ public class HomeActivity extends AppCompatActivity
         txtPhone = (TextView)headerView.findViewById(R.id.txtPhone);
 
         //Set info
-        Log.d("PATITA", PrintmaxTestService.currentUser.toString());
         txtName.setText(PrintmaxTestService.currentUser.getName());
         txtPhone.setText(PrintmaxTestService.currentUser.getPhone());
     }

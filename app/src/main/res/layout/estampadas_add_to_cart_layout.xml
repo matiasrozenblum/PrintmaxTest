@@ -156,6 +156,12 @@
                         android:layout_height="wrap_content" />
 
                     <RadioButton
+                        android:id="@+id/poliamidaEco"
+                        android:text="Poliamida Eco"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
                         android:id="@+id/satenNegro"
                         android:text="Saten negro"
                         android:layout_width="wrap_content"

@@ -9,11 +9,13 @@ import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.Drink;
+import com.example.matirozen.printmaxtest.Model.Price;
 import com.example.matirozen.printmaxtest.Model.User;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class PrintmaxTestService {
@@ -75,5 +77,9 @@ public class PrintmaxTestService {
 
     public Call<String> submitOrder(float price, String detail, String comment, String address, String phone){
         return api.submitOrder(price, detail, comment, address, phone);
+    }
+
+    public Call<Price> getPrice(String code){
+        return api.getPrice(code);
     }
 }

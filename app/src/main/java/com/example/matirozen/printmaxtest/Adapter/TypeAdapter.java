@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
 import com.example.matirozen.printmaxtest.Interface.ItemClickListener;
 import com.example.matirozen.printmaxtest.Model.Drink;
+import com.example.matirozen.printmaxtest.Model.Price;
 import com.example.matirozen.printmaxtest.R;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.google.gson.Gson;
@@ -31,10 +32,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
     Context context;
     List<Drink> drinkList;
-    String[] material = {"fasco", "saten", "poliamida", "saten negro", "saten marfil", "saten autoadhesivo", "algodon", "alta definicion", "tafeta"};
+    String[] material = {"fasco", "saten", "poliamida", "poliamida eco", "saten negro", "saten marfil", "saten autoadhesivo", "algodon", "alta definicion", "tafeta"};
+    String[] codigo = {"f", "s", "p", "pe", "sn", "sm", "sa", "al", "ad", "tf"};
     String[] presentacion = {"rollo", "cortadas"};
     private static final int ESTAMPADAS = 0;
     private static final int BORDADAS = 1;
@@ -111,6 +117,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         RadioButton fasco = (RadioButton)itemView.findViewById(R.id.fasco);
         RadioButton saten = (RadioButton)itemView.findViewById(R.id.saten);
         RadioButton poliamida = (RadioButton)itemView.findViewById(R.id.poliamida);
+        RadioButton poliamidaEco = (RadioButton)itemView.findViewById(R.id.poliamidaEco);
         RadioButton satenNegro = (RadioButton)itemView.findViewById(R.id.satenNegro);
         RadioButton satenMarfil = (RadioButton)itemView.findViewById(R.id.satenMarfil);
         RadioButton satenAutoadhesivo = (RadioButton)itemView.findViewById(R.id.satenAutoadhesivo);
@@ -158,7 +165,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         spAncho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                PrintmaxTestService.ancho = (int) adapterView.getItemIdAtPosition(i);
+                PrintmaxTestService.ancho = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
             }
 
             @Override
@@ -204,32 +211,39 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     PrintmaxTestService.material = 2;
             }
         });
-        satenNegro.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        poliamidaEco.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b)
                     PrintmaxTestService.material = 3;
             }
         });
-        satenMarfil.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        satenNegro.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b)
                     PrintmaxTestService.material = 4;
             }
         });
-        satenAutoadhesivo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        satenMarfil.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b)
                     PrintmaxTestService.material = 5;
             }
         });
-        algodon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        satenAutoadhesivo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b)
                     PrintmaxTestService.material = 6;
+            }
+        });
+        algodon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b)
+                    PrintmaxTestService.material = 7;
             }
         });
 
@@ -520,8 +534,32 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         txtColores.setText(new StringBuilder("Colores: ").append(PrintmaxTestService.colores));
         String mat = material[PrintmaxTestService.material];
         String pres = presentacion[PrintmaxTestService.presentacion];
+        String cod = new StringBuilder(codigo[PrintmaxTestService.material]).append(PrintmaxTestService.ancho).toString();
+        PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
+            @Override
+            public void onResponse(Call<Price> call, Response<Price> response) {
+                Log.d("PRICE", response.body().toString());
+                if(unidad == "metros"){
+                    if(cantidad > 15000){
+                        //price = response.body();
+                    } else if(cantidad > 10000){
+                       // price = response.body();
+                    } else if(cantidad > 5000){
+                       // price = response.body();
+                    } else if(cantidad > 3000){
+                       // price = response.body();
+                    } else {
+                       // price = response.body();
+                    }
+                }
+            }
 
-        double price = (Double.parseDouble(drinkList.get(position).price)* cantidad);
+            @Override
+            public void onFailure(Call<Price> call, Throwable t) {
+                String price = "a";
+            }
+        });
+        int price = 0;
         txtProductPrice.setText(new StringBuilder("$").append(price).toString());
         txtMaterial.setText(new StringBuilder("Material: ").append(mat));
         txtTam.setText(new StringBuilder(PrintmaxTestService.ancho).append(" mm x ").append(PrintmaxTestService.largo).append(" mm"));
