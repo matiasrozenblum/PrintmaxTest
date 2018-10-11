@@ -21,6 +21,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     Context context;
     List<Cart> cartList;
+    String[] material = {"fasco", "saten", "poliamida", "poliamida eco", "saten negro", "saten marfil", "saten autoadhesivo", "algodon", "alta definicion", "tafeta"};
+    String[] presentacion = {"rollo", "cortadas"};
 
     public CartAdapter(Context context, List<Cart> cartList) {
         this.context = context;
@@ -42,11 +44,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.txtProductName.setText(cartList.get(position).name);
         holder.txtPrice.setText(new StringBuilder("$").append(cartList.get(position).price));
         holder.txtDetails.setText(new StringBuilder("Cantidad: ")
-                .append(cartList.get(position).cantidad).append(cartList.get(position).unidad).append("\n")
-                .append("Material:").append(cartList.get(position).material).append("\n")
+                .append(cartList.get(position).cantidad).append(" ").append(cartList.get(position).unidad).append("\n")
+                .append("Material: ").append(material[cartList.get(position).material]).append("\n")
                 .append("Tamaño: ").append(cartList.get(position).ancho).append(" mm x ").append(cartList.get(position).largo).append(" mm").append("\n")
-                .append("Colores: ").append(cartList.get(position).colores)
-                .append("Presentacion:").append(cartList.get(position).presentacion).append("\n").toString());
+                .append("Colores: ").append(cartList.get(position).colores).append("\n")
+                .append("Presentacion: ").append(presentacion[cartList.get(position).presentacion]).append("\n").toString());
     }
 
     @Override

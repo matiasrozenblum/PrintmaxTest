@@ -159,7 +159,9 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
+                if (edtQty.getText().toString() != "") {
+                    PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
+                }
             }
         });
         spAncho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -297,7 +299,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         builder.setView(itemView);
         builder.setNegativeButton("Add to cart", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(final DialogInterface dialog, int which) {
                 if(PrintmaxTestService.cantidad == -1){
                     Toast.makeText(context, "Ingrese metros/unidades", Toast.LENGTH_SHORT).show();
                     return;
@@ -322,9 +324,62 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     Toast.makeText(context, "Ingrese formato", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                String cod = new StringBuilder(codigo[PrintmaxTestService.material]).append(PrintmaxTestService.ancho).toString();
+                PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
+                    @Override
+                    public void onResponse(Call<Price> call, Response<Price> response) {
+                        if (PrintmaxTestService.unidad == "Metros") {
+                            if (PrintmaxTestService.cantidad > 15000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
+                            } else if (PrintmaxTestService.cantidad > 10000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
+                            } else if (PrintmaxTestService.cantidad > 5000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
+                            } else if (PrintmaxTestService.cantidad > 3000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
+                            } else {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
+                            }
+                            PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
+                        } else {
+                            PrintmaxTestService.cantidad *= PrintmaxTestService.largo;
+                            if (PrintmaxTestService.cantidad > 15000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
+                            } else if (PrintmaxTestService.cantidad > 10000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
+                            } else if (PrintmaxTestService.cantidad > 5000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
+                            } else if (PrintmaxTestService.cantidad > 3000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
+                            } else {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
+                            }
+                        }
+                        if(PrintmaxTestService.colores == 2){
+                            PrintmaxTestService.price += PrintmaxTestService.price / 10;
+                        } else if(PrintmaxTestService.colores == 3){
+                            PrintmaxTestService.price += (PrintmaxTestService.price / 100)*18;
+                        } else if (PrintmaxTestService.colores == 4){
+                            PrintmaxTestService.price += PrintmaxTestService.price / 4;
+                        }
+                        if(PrintmaxTestService.material < 8){
+                            if(PrintmaxTestService.price < 2500){
+                                PrintmaxTestService.price = 2500;
+                            }
+                        } else {
+                            if(PrintmaxTestService.price < 3000){
+                                PrintmaxTestService.price = 3000;
+                            }
+                        }
+                        showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
+                        dialog.dismiss();
+                    }
 
-                showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
-                dialog.dismiss();
+                    @Override
+                    public void onFailure(Call<Price> call, Throwable t) {
+                        String price = "a";
+                    }
+                });
             }
         });
 
@@ -478,7 +533,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         builder.setView(itemView);
         builder.setNegativeButton("Add to cart", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(final DialogInterface dialog, int which) {
                 if(PrintmaxTestService.cantidad == -1){
                     Toast.makeText(context, "Ingrese metros/unidades", Toast.LENGTH_SHORT).show();
                     return;
@@ -503,9 +558,63 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     Toast.makeText(context, "Ingrese formato", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                String cod = new StringBuilder(codigo[PrintmaxTestService.material]).append(PrintmaxTestService.ancho).toString();
+                PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
+                    @Override
+                    public void onResponse(Call<Price> call, Response<Price> response) {
+                        if (PrintmaxTestService.unidad == "Metros") {
+                            if (PrintmaxTestService.cantidad > 15000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
+                            } else if (PrintmaxTestService.cantidad > 10000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
+                            } else if (PrintmaxTestService.cantidad > 5000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
+                            } else if (PrintmaxTestService.cantidad > 3000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
+                            } else {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
+                            }
+                            PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
+                        } else {
+                            PrintmaxTestService.cantidad *= PrintmaxTestService.largo;
+                            if (PrintmaxTestService.cantidad > 15000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
+                            } else if (PrintmaxTestService.cantidad > 10000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
+                            } else if (PrintmaxTestService.cantidad > 5000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
+                            } else if (PrintmaxTestService.cantidad > 3000) {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
+                            } else {
+                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
+                            }
+                        }
 
-                showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
-                dialog.dismiss();
+                        if(PrintmaxTestService.colores == 2){
+                            PrintmaxTestService.price += PrintmaxTestService.price / 10;
+                        } else if(PrintmaxTestService.colores == 3){
+                            PrintmaxTestService.price += (PrintmaxTestService.price / 100)*18;
+                        } else if (PrintmaxTestService.colores == 4){
+                            PrintmaxTestService.price += PrintmaxTestService.price / 4;
+                        }
+                        if(PrintmaxTestService.material < 8){
+                            if(PrintmaxTestService.price < 2500){
+                                PrintmaxTestService.price = 2500;
+                            }
+                        } else {
+                            if(PrintmaxTestService.price < 3000){
+                                PrintmaxTestService.price = 3000;
+                            }
+                        }
+                        showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Price> call, Throwable t) {
+                        String price = "a";
+                    }
+                });
             }
         });
 
@@ -534,38 +643,13 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         txtColores.setText(new StringBuilder("Colores: ").append(PrintmaxTestService.colores));
         String mat = material[PrintmaxTestService.material];
         String pres = presentacion[PrintmaxTestService.presentacion];
-        String cod = new StringBuilder(codigo[PrintmaxTestService.material]).append(PrintmaxTestService.ancho).toString();
-        PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
-            @Override
-            public void onResponse(Call<Price> call, Response<Price> response) {
-                Log.d("PRICE", response.body().toString());
-                if(unidad == "metros"){
-                    if(cantidad > 15000){
-                        //price = response.body();
-                    } else if(cantidad > 10000){
-                       // price = response.body();
-                    } else if(cantidad > 5000){
-                       // price = response.body();
-                    } else if(cantidad > 3000){
-                       // price = response.body();
-                    } else {
-                       // price = response.body();
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Price> call, Throwable t) {
-                String price = "a";
-            }
-        });
-        int price = 0;
-        txtProductPrice.setText(new StringBuilder("$").append(price).toString());
+        txtProductPrice.setText(new StringBuilder("$").append(PrintmaxTestService.price).toString());
         txtMaterial.setText(new StringBuilder("Material: ").append(mat));
         txtTam.setText(new StringBuilder(PrintmaxTestService.ancho).append(" mm x ").append(PrintmaxTestService.largo).append(" mm"));
         txtPres.setText(new StringBuilder("Presentacion: ").append(pres));
 
-        final double finalPrice = price;
+        final double finalPrice = PrintmaxTestService.price;
         builder.setNegativeButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -599,5 +683,20 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
         builder.setView(itemView);
         builder.show();
+    }
+
+    private boolean isEstampada() {
+        if(PrintmaxTestService.material >= 0 && PrintmaxTestService.material < 8){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private boolean isBordada() {
+        if(PrintmaxTestService.material >= 0 && PrintmaxTestService.material > 8){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

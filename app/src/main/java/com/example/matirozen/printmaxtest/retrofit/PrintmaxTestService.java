@@ -33,6 +33,7 @@ public class PrintmaxTestService {
     public static int ancho = -1;
     public static int largo = -1;
     public static int colores = -1;
+    public static double price = 0;
 
     //Database
     public static UserDatabase userDatabase;

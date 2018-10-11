@@ -2,23 +2,23 @@ package com.example.matirozen.printmaxtest.Model;
 
 public class Price {
     private String codigo;
-    private String precioA;
-    private String precioB;
-    private String precioC;
-    private String precioD;
-    private String precioE;
+    private String precioa;
+    private String preciob;
+    private String precioc;
+    private String preciod;
+    private String precioe;
 
     public Price() {
 
     }
 
-    public Price(String codigo, String precioA, String precioB, String precioC, String precioD, String precioE) {
+    public Price(String codigo, String precioa, String preciob, String precioc, String preciod, String precioe) {
         this.codigo = codigo;
-        this.precioA = precioA;
-        this.precioB = precioB;
-        this.precioC = precioC;
-        this.precioD = precioD;
-        this.precioE = precioE;
+        this.precioa = precioa;
+        this.preciob = preciob;
+        this.precioc = precioc;
+        this.preciod = preciod;
+        this.precioe = precioe;
 
     }
 
@@ -30,55 +30,55 @@ public class Price {
         this.codigo = codigo;
     }
 
-    public String getPrecioA() {
-        return precioA;
+    public String getprecioa() {
+        return precioa;
     }
 
-    public void setPrecioA(String precioA) {
-        this.precioA = precioA;
+    public void setprecioa(String precioa) {
+        this.precioa = precioa;
     }
 
-    public String getPrecioB() {
-        return precioB;
+    public String getpreciob() {
+        return preciob;
     }
 
-    public void setPrecioB(String precioB) {
-        this.precioC = precioB;
+    public void setpreciob(String preciob) {
+        this.preciob = preciob;
     }
 
-    public String getPrecioC() {
-        return precioC;
+    public String getprecioc() {
+        return precioc;
     }
 
-    public void setPrecioC(String precioC) {
-        this.precioC = precioC;
+    public void setprecioc(String precioc) {
+        this.precioc = precioc;
     }
 
-    public String getPrecioD() {
-        return precioD;
+    public String getpreciod() {
+        return preciod;
     }
 
-    public void setPrecioD(String precioD) {
-        this.precioD = precioD;
+    public void setpreciod(String preciod) {
+        this.preciod = preciod;
     }
 
-    public String getPrecioE() {
-        return precioE;
+    public String getprecioe() {
+        return precioe;
     }
 
-    public void setPrecioE(String precioE) {
-        this.precioE = precioE;
+    public void setprecioe(String precioe) {
+        this.precioe = precioe;
     }
 
     @Override
     public String toString() {
         return "Price{" +
                 "codigo='" + codigo + '\'' +
-                ", precioA='" + precioA + '\'' +
-                ", precioB='" + precioB + '\'' +
-                ", precioC='" + precioC + '\'' +
-                ", precioD='" + precioD + '\'' +
-                ", precioE='" + precioE + '\'' +
+                ", precioa='" + precioa + '\'' +
+                ", preciob='" + preciob + '\'' +
+                ", precioc='" + precioc + '\'' +
+                ", preciod='" + preciod + '\'' +
+                ", precioe='" + precioe + '\'' +
                 '}';
     }
 }
