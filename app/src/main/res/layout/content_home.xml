@@ -7,7 +7,7 @@
     android:background="@drawable/printmax1"
     android:weightSum="8"
     android:orientation="vertical"
-    tools:context=".DrinkActivity">
+    tools:context=".HomeActivity">
 
     <android.support.v7.widget.RecyclerView
         android:paddingTop="50dp"

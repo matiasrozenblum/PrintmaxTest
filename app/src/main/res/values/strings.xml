@@ -17,6 +17,9 @@
     <string name="action_settings">Settings</string>
     <integer name="add_to_cart_qty">0</integer>
     <string name="ancho">Ancho</string>
+    <string name="material">Material</string>
+    <string name="colores">Colores</string>
+    <string name="presentacion">Presentacion</string>
     <string-array name="estampadasAncho">
         <item>10</item>
         <item>20</item>
@@ -35,5 +38,29 @@
         <item>65</item>
         <item>80</item>
         <item>99</item>
+    </string-array>
+    <string-array name="estampadasMaterial">
+        <item>Fasco</item>
+        <item>Saten</item>
+        <item>Poliamida</item>
+        <item>Poliamida Eco</item>
+        <item>Saten negro</item>
+        <item>Saten marfil</item>
+        <item>Saten autoadhesivo</item>
+        <item>Algodon</item>
+    </string-array>
+    <string-array name="bordadasMaterial">
+        <item>Alta Definicion</item>
+        <item>Tafeta</item>
+    </string-array>
+    <string-array name="colores">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    </string-array>
+    <string-array name="presentacion">
+        <item>Rollo</item>
+        <item>Cortadas</item>
     </string-array>
 </resources>

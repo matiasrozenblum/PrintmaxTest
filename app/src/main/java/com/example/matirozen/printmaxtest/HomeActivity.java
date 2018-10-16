@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.matirozen.printmaxtest.Adapter.BordadasAdapter;
 import com.example.matirozen.printmaxtest.Adapter.TypeAdapter;
 import com.example.matirozen.printmaxtest.Model.Drink;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;

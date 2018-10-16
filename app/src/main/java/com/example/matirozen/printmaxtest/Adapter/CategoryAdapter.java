@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.matirozen.printmaxtest.DrinkActivity;
 import com.example.matirozen.printmaxtest.HomeActivity;
 import com.example.matirozen.printmaxtest.Interface.ItemClickListener;
 import com.example.matirozen.printmaxtest.Model.Category;

@@ -114,26 +114,29 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         RadioButton rbUnidades = (RadioButton)itemView.findViewById(R.id.rbUnidades);
         final EditText edtQty = (EditText)itemView.findViewById(R.id.edt_qty);
         TextView txtProductDialog = (TextView)itemView.findViewById(R.id.txt_cart_product_name);
-        RadioButton fasco = (RadioButton)itemView.findViewById(R.id.fasco);
-        RadioButton saten = (RadioButton)itemView.findViewById(R.id.saten);
-        RadioButton poliamida = (RadioButton)itemView.findViewById(R.id.poliamida);
-        RadioButton poliamidaEco = (RadioButton)itemView.findViewById(R.id.poliamidaEco);
-        RadioButton satenNegro = (RadioButton)itemView.findViewById(R.id.satenNegro);
-        RadioButton satenMarfil = (RadioButton)itemView.findViewById(R.id.satenMarfil);
-        RadioButton satenAutoadhesivo = (RadioButton)itemView.findViewById(R.id.satenAutoadhesivo);
-        RadioButton algodon = (RadioButton)itemView.findViewById(R.id.algodon);
-        Spinner spAncho = (Spinner) itemView.findViewById(R.id.spinner);
-        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        Spinner spMaterial = (Spinner) itemView.findViewById(R.id.spMaterial);
+        final ArrayAdapter<CharSequence> materialAdapter = ArrayAdapter.createFromResource(
+                context, R.array.estampadasMaterial, android.R.layout.simple_spinner_item);
+        materialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spMaterial.setAdapter(materialAdapter);
+        Spinner spAncho = (Spinner) itemView.findViewById(R.id.spAncho);
+        final ArrayAdapter<CharSequence> anchoAdapter = ArrayAdapter.createFromResource(
                 context, R.array.estampadasAncho, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spAncho.setAdapter(adapter);
+        anchoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spAncho.setAdapter(anchoAdapter);
         final EditText edtLargo = (EditText)itemView.findViewById(R.id.edtLargo);
-        RadioButton unColor = (RadioButton)itemView.findViewById(R.id.unColor);
-        RadioButton dosColores = (RadioButton)itemView.findViewById(R.id.dosColores);
-        RadioButton tresColores = (RadioButton)itemView.findViewById(R.id.tresColores);
-        RadioButton cuatroColores = (RadioButton)itemView.findViewById(R.id.cuatroColores);
+        Spinner spColores = (Spinner) itemView.findViewById(R.id.spColores);
+        final ArrayAdapter<CharSequence> coloresAdapter = ArrayAdapter.createFromResource(
+                context, R.array.colores, android.R.layout.simple_spinner_item);
+        coloresAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spColores.setAdapter(coloresAdapter);
         TextView txtProductPrice = (TextView)itemView.findViewById(R.id.txtProductPrice);
-        txtProductPrice.setText(new StringBuilder("$").append(drinkList.get(position).price));
+        Spinner spPresentacion = (Spinner) itemView.findViewById(R.id.spPresentacion);
+        final ArrayAdapter<CharSequence> presAdapter = ArrayAdapter.createFromResource(
+                context, R.array.presentacion, android.R.layout.simple_spinner_item);
+        presAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPresentacion.setAdapter(presAdapter);
+        PrintmaxTestService.unidad = "Metros";
         rbMetros.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -146,6 +149,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 PrintmaxTestService.unidad = "Unidades";
             }
         });
+
         edtQty.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -164,6 +168,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 }
             }
         });
+
         spAncho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -192,101 +197,43 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 PrintmaxTestService.largo = Integer.parseInt(edtLargo.getText().toString());
             }
         });
-        fasco.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        PrintmaxTestService.material = 0;
+        spMaterial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 0;
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                PrintmaxTestService.material = i;
             }
-        });
-        saten.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 1;
-            }
-        });
-        poliamida.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 2;
-            }
-        });
-        poliamidaEco.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 3;
-            }
-        });
-        satenNegro.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 4;
-            }
-        });
-        satenMarfil.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 5;
-            }
-        });
-        satenAutoadhesivo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 6;
-            }
-        });
-        algodon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 7;
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
-        unColor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        PrintmaxTestService.colores = 1;
+        spColores.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.colores = 1;
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                PrintmaxTestService.colores = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
-        dosColores.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        PrintmaxTestService.presentacion = 0;
+        spPresentacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.colores = 2;
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                PrintmaxTestService.presentacion = i;
             }
-        });
-        tresColores.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.colores = 3;
-            }
-        });
-        cuatroColores.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.colores = 4;
-            }
-        });
-        RadioButton cortadas = (RadioButton)itemView.findViewById(R.id.cortadas);
-        RadioButton rollo = (RadioButton)itemView.findViewById(R.id.rollo);
-        rollo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.presentacion = 0;
-            }
-        });
-        cortadas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.presentacion= 1;
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
@@ -398,20 +345,29 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         RadioButton rbUnidades = (RadioButton)itemView.findViewById(R.id.rbUnidades);
         final EditText edtQty = (EditText)itemView.findViewById(R.id.edt_qty);
         TextView txtProductDialog = (TextView)itemView.findViewById(R.id.txt_cart_product_name);
-        RadioButton altaDefinicion = (RadioButton)itemView.findViewById(R.id.altaDefinicion);
-        RadioButton tafeta = (RadioButton)itemView.findViewById(R.id.tafeta);
-        Spinner spAncho = (Spinner) itemView.findViewById(R.id.spinner);
-        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        Spinner spMaterial = (Spinner) itemView.findViewById(R.id.spMaterial);
+        final ArrayAdapter<CharSequence> materialAdapter = ArrayAdapter.createFromResource(
+                context, R.array.bordadasMaterial, android.R.layout.simple_spinner_item);
+        materialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spMaterial.setAdapter(materialAdapter);
+        Spinner spAncho = (Spinner) itemView.findViewById(R.id.spAncho);
+        final ArrayAdapter<CharSequence> anchoAdapter = ArrayAdapter.createFromResource(
                 context, R.array.bordadasAncho, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spAncho.setAdapter(adapter);
+        anchoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spAncho.setAdapter(anchoAdapter);
         final EditText edtLargo = (EditText)itemView.findViewById(R.id.edtLargo);
-        RadioButton unColor = (RadioButton)itemView.findViewById(R.id.unColor);
-        RadioButton dosColores = (RadioButton)itemView.findViewById(R.id.dosColores);
-        RadioButton tresColores = (RadioButton)itemView.findViewById(R.id.tresColores);
-        RadioButton cuatroColores = (RadioButton)itemView.findViewById(R.id.cuatroColores);
+        Spinner spColores = (Spinner) itemView.findViewById(R.id.spColores);
+        final ArrayAdapter<CharSequence> coloresAdapter = ArrayAdapter.createFromResource(
+                context, R.array.colores, android.R.layout.simple_spinner_item);
+        coloresAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spColores.setAdapter(coloresAdapter);
         TextView txtProductPrice = (TextView)itemView.findViewById(R.id.txtProductPrice);
-        txtProductPrice.setText(new StringBuilder("$").append(drinkList.get(position).price));
+        Spinner spPresentacion = (Spinner) itemView.findViewById(R.id.spPresentacion);
+        final ArrayAdapter<CharSequence> presAdapter = ArrayAdapter.createFromResource(
+                context, R.array.presentacion, android.R.layout.simple_spinner_item);
+        presAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPresentacion.setAdapter(presAdapter);
+        PrintmaxTestService.unidad = "Metros";
         rbMetros.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -424,6 +380,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 PrintmaxTestService.unidad = "Unidades";
             }
         });
+
         edtQty.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -437,13 +394,16 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
+                if (edtQty.getText().toString() != "") {
+                    PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
+                }
             }
         });
+
         spAncho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                PrintmaxTestService.ancho = (int) adapterView.getItemIdAtPosition(i);
+                PrintmaxTestService.ancho = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
             }
 
             @Override
@@ -468,59 +428,43 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 PrintmaxTestService.largo = Integer.parseInt(edtLargo.getText().toString());
             }
         });
-        altaDefinicion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        PrintmaxTestService.material = 8;
+        spMaterial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 7;
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                PrintmaxTestService.material = i+8;
             }
-        });
-        tafeta.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.material = 8;
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
-        unColor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        PrintmaxTestService.colores = 1;
+        spColores.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.colores = 1;
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                PrintmaxTestService.colores = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
-        dosColores.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        PrintmaxTestService.presentacion = 0;
+        spPresentacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.colores = 2;
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                PrintmaxTestService.presentacion = i;
             }
-        });
-        tresColores.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.colores = 3;
-            }
-        });
-        cuatroColores.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.colores = 4;
-            }
-        });
-        RadioButton cortadas = (RadioButton)itemView.findViewById(R.id.cortadas);
-        RadioButton rollo = (RadioButton)itemView.findViewById(R.id.rollo);
-        rollo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.presentacion = 0;
-            }
-        });
-        cortadas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
-                    PrintmaxTestService.presentacion= 1;
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
@@ -558,7 +502,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     Toast.makeText(context, "Ingrese formato", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String cod = new StringBuilder(codigo[PrintmaxTestService.material]).append(PrintmaxTestService.ancho).toString();
+                String cod = new StringBuilder(codigo[PrintmaxTestService.material]).append(PrintmaxTestService.ancho).append(PrintmaxTestService.colores).append("c").toString();
                 PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
                     @Override
                     public void onResponse(Call<Price> call, Response<Price> response) {
@@ -646,7 +590,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
         txtProductPrice.setText(new StringBuilder("$").append(PrintmaxTestService.price).toString());
         txtMaterial.setText(new StringBuilder("Material: ").append(mat));
-        txtTam.setText(new StringBuilder(PrintmaxTestService.ancho).append(" mm x ").append(PrintmaxTestService.largo).append(" mm"));
+        txtTam.setText(new StringBuilder("Tamaño: ").append(PrintmaxTestService.ancho).append(" mm x ").append(PrintmaxTestService.largo).append(" mm"));
         txtPres.setText(new StringBuilder("Presentacion: ").append(pres));
 
         final double finalPrice = PrintmaxTestService.price;
