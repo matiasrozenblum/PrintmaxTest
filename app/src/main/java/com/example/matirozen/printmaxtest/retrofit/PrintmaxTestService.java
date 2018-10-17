@@ -56,8 +56,8 @@ public class PrintmaxTestService {
         return api.checkExistsUser(phone);
     }
 
-    public Call<User> registerNewUser(String phone, String name, String address, String birth){
-        return api.registerNewUser(phone, name, address, birth);
+    public Call<User> registerNewUser(String phone, String name){
+        return api.registerNewUser(phone, name);
     }
 
     public Call<User> getUserInformation(String phone){
@@ -76,8 +76,8 @@ public class PrintmaxTestService {
         return api.getDrink(menuId);
     }
 
-    public Call<String> submitOrder(float price, String detail, String comment, String address, String phone){
-        return api.submitOrder(price, detail, comment, address, phone);
+    public Call<String> submitOrder(float price, String detail, String comment, String phone){
+        return api.submitOrder(price, detail, comment, phone);
     }
 
     public Call<Price> getPrice(String code){

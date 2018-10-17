@@ -24,9 +24,7 @@ public interface IPrintmaxTestAPI {
     @FormUrlEncoded
     @POST("register.php")
     Call<User> registerNewUser(@Field("phone") String phone,
-                               @Field("name") String name,
-                               @Field("address") String address,
-                               @Field("birth") String birth);
+                               @Field("name") String name);
 
     @FormUrlEncoded
     @POST("getdrink.php")
@@ -47,7 +45,6 @@ public interface IPrintmaxTestAPI {
     Call<String> submitOrder(@Field("price") float orderPrice,
                              @Field("orderDetail") String orderDetail,
                              @Field("comment") String comment,
-                             @Field("address") String address,
                              @Field("phone") String phone);
 
     @FormUrlEncoded

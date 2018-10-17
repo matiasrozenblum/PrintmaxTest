@@ -38,26 +38,6 @@
                 android:layout_height="wrap_content"
                 app:met_floatingLabel="highlight"
                 />
-
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/edt_address"
-                android:hint="@string/register_layout_address_hint"
-                android:textSize="12sp"
-                android:inputType="text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:met_floatingLabel="highlight"
-                />
-
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/edt_birth"
-                android:hint="@string/register_layout_birth_hint"
-                android:textSize="20sp"
-                android:digits="1234567890-"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:met_floatingLabel="highlight"
-                />
         </LinearLayout>
 
         <Button

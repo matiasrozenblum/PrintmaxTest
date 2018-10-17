@@ -78,25 +78,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         builder.setTitle("Enviar orden");
         View submitOrderLayout = LayoutInflater.from(this).inflate(R.layout.submit_order_layout, null);
         final EditText edtComment = submitOrderLayout.findViewById(R.id.edtComment);
-        final EditText edtOtherAddress = submitOrderLayout.findViewById(R.id.edtOtherAddress);
-        final RadioButton rdiUserAddress = submitOrderLayout.findViewById(R.id.rdiThisAddress);
-        final RadioButton rdiOtherAddress = submitOrderLayout.findViewById(R.id.rdiOtherAddress);
-
-        rdiUserAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b)
-                    edtOtherAddress.setEnabled(false);
-            }
-        });
-
-        rdiOtherAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b)
-                    edtOtherAddress.setEnabled(true);
-            }
-        });
 
         builder.setView(submitOrderLayout);
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -108,14 +89,6 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 final String orderComment = edtComment.getText().toString();
-                final String orderAddress;
-                if(rdiUserAddress.isChecked()){
-                    orderAddress = PrintmaxTestService.currentUser.getAddress();
-                } else if(rdiOtherAddress.isChecked()){
-                    orderAddress = edtOtherAddress.getText().toString();
-                } else{
-                    orderAddress = "";
-                }
 
                 //Submit order
                 compositeDisposable.add(
@@ -125,11 +98,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
                         .subscribe(new Consumer<List<Cart>>() {
                             @Override
                             public void accept(List<Cart> carts) throws Exception {
-                                if(!TextUtils.isEmpty(orderAddress)){
-                                    sendOrderToServer(PrintmaxTestService.cartRepository.sumPrice(), carts, orderComment, orderAddress);
-                                } else{
-                                    Toast.makeText(CartActivity.this, "Order Address can't be empty", Toast.LENGTH_SHORT).show();
-                                }
+                                sendOrderToServer(PrintmaxTestService.cartRepository.sumPrice(), carts, orderComment);
                             }
                         })
                 );
@@ -138,11 +107,11 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         builder.show();
     }
 
-    private void sendOrderToServer(float price, List<Cart> carts, String orderComment, String orderAddress) {
+    private void sendOrderToServer(float price, List<Cart> carts, String orderComment) {
         if(carts.size() > 0){
             String orderDetail = new Gson().toJson(carts);
 
-            PrintmaxTestService.get().submitOrder(price, orderDetail, orderComment, orderAddress, PrintmaxTestService.currentUser.getPhone())
+            PrintmaxTestService.get().submitOrder(price, orderDetail, orderComment, PrintmaxTestService.currentUser.getPhone())
                     .enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {

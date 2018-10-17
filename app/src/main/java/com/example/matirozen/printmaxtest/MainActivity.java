@@ -116,12 +116,9 @@ public class MainActivity extends AppCompatActivity {
 
         final MaterialEditText edtName = registerLayout.findViewById(R.id.edt_name);
         final MaterialEditText edtPhone = registerLayout.findViewById(R.id.edt_phone);
-        final MaterialEditText edtAddress = registerLayout.findViewById(R.id.edt_address);
-        final MaterialEditText edtBirth = registerLayout.findViewById(R.id.edt_birth);
 
         Button btnRegister = registerLayout.findViewById(R.id.btn_register);
 
-        edtBirth.addTextChangedListener(new PatternedTextWatcher("####-##-##"));
         builder.setView(registerLayout);
         final AlertDialog dialog = builder.create();
 
@@ -136,19 +133,9 @@ public class MainActivity extends AppCompatActivity {
                 waitingDialog.show();
                 waitingDialog.setMessage("Please waiting...");
 
-                String address = (edtAddress.getText() != null)? edtAddress.getText().toString() : null;
-                String birth = (edtBirth.getText() != null)? edtBirth.getText().toString() : null;
                 String name = (edtName.getText() != null)? edtName.getText().toString() : null;
                 final String phone = (edtPhone.getText() != null)? edtPhone.getText().toString() : null;
 
-                if(TextUtils.isEmpty(address)){
-                    Toast.makeText(MainActivity.this, "Ingrese su dirección", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(birth)){
-                    Toast.makeText(MainActivity.this, "Ingrese su fecha de nacimiento", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if(TextUtils.isEmpty(name)){
                     Toast.makeText(MainActivity.this, "Ingrese su nombre", Toast.LENGTH_SHORT).show();
                     return;
@@ -158,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                PrintmaxTestService.get().registerNewUser(phone, name, address, birth)
+                PrintmaxTestService.get().registerNewUser(phone, name)
                     .enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {

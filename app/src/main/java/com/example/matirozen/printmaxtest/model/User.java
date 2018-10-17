@@ -2,19 +2,15 @@ package com.example.matirozen.printmaxtest.Model;
 
 public class User {
     private String phone;
-    private String address;
     private String name;
-    private String birth;
 
     public User() {
 
     }
 
-    public User(String phone, String address, String name, String birth) {
+    public User(String phone, String name) {
         this.phone = phone;
-        this.address = address;
         this.name = name;
-        this.birth = birth;
     }
 
     public String getPhone() {
@@ -25,14 +21,6 @@ public class User {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getName() {
         return name;
     }
@@ -41,21 +29,11 @@ public class User {
         this.name = name;
     }
 
-    public String getBirth() {
-        return birth;
-    }
-
-    public void setBirth(String birth) {
-        this.birth = birth;
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
                 ", name='" + name + '\'' +
-                ", birth='" + birth + '\'' +
                 '}';
     }
 }
