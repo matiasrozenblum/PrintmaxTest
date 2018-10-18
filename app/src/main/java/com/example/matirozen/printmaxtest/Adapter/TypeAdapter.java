@@ -60,7 +60,6 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull DrinkViewHolder holder, final int position) {
         if(position == 0){
-            holder.txt_price.setText(new StringBuilder("$").append(drinkList.get(position).price).toString());
             holder.txt_drink_name.setText(drinkList.get(position).name);
             holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -78,7 +77,6 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 }
             });
         } else if(position == 1){
-            holder.txt_price.setText(new StringBuilder("$").append(drinkList.get(position).price).toString());
             holder.txt_drink_name.setText(drinkList.get(position).name);
             holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -130,7 +128,6 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 context, R.array.colores, android.R.layout.simple_spinner_item);
         coloresAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spColores.setAdapter(coloresAdapter);
-        TextView txtProductPrice = (TextView)itemView.findViewById(R.id.txtProductPrice);
         Spinner spPresentacion = (Spinner) itemView.findViewById(R.id.spPresentacion);
         final ArrayAdapter<CharSequence> presAdapter = ArrayAdapter.createFromResource(
                 context, R.array.presentacion, android.R.layout.simple_spinner_item);
@@ -275,33 +272,24 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
                     @Override
                     public void onResponse(Call<Price> call, Response<Price> response) {
+                        if (PrintmaxTestService.cantidad >= 10000) {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
+                        } else if (PrintmaxTestService.cantidad >= 5000) {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
+                        } else if (PrintmaxTestService.cantidad >= 3000) {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
+                        } else if (PrintmaxTestService.cantidad >= 1000) {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
+                        } else {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
+                        }
+
                         if (PrintmaxTestService.unidad == "Metros") {
-                            if (PrintmaxTestService.cantidad > 15000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
-                            } else if (PrintmaxTestService.cantidad > 10000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
-                            } else if (PrintmaxTestService.cantidad > 5000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
-                            } else if (PrintmaxTestService.cantidad > 3000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
-                            } else {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
-                            }
                             PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
                         } else {
                             PrintmaxTestService.cantidad *= PrintmaxTestService.largo;
-                            if (PrintmaxTestService.cantidad > 15000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
-                            } else if (PrintmaxTestService.cantidad > 10000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
-                            } else if (PrintmaxTestService.cantidad > 5000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
-                            } else if (PrintmaxTestService.cantidad > 3000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
-                            } else {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
-                            }
                         }
+
                         if(PrintmaxTestService.colores == 2){
                             PrintmaxTestService.price += PrintmaxTestService.price / 10;
                         } else if(PrintmaxTestService.colores == 3){
@@ -309,14 +297,12 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                         } else if (PrintmaxTestService.colores == 4){
                             PrintmaxTestService.price += PrintmaxTestService.price / 4;
                         }
-                        if(PrintmaxTestService.material < 8){
-                            if(PrintmaxTestService.price < 2500){
-                                PrintmaxTestService.price = 2500;
-                            }
-                        } else {
-                            if(PrintmaxTestService.price < 3000){
-                                PrintmaxTestService.price = 3000;
-                            }
+
+                        if(PrintmaxTestService.presentacion == 1){
+                            PrintmaxTestService.price += (PrintmaxTestService.price / 100)*15;
+                        }
+                        if(PrintmaxTestService.price < 2500){
+                            PrintmaxTestService.price = 2500;
                         }
                         showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
                         dialog.dismiss();
@@ -361,7 +347,6 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 context, R.array.colores, android.R.layout.simple_spinner_item);
         coloresAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spColores.setAdapter(coloresAdapter);
-        TextView txtProductPrice = (TextView)itemView.findViewById(R.id.txtProductPrice);
         Spinner spPresentacion = (Spinner) itemView.findViewById(R.id.spPresentacion);
         final ArrayAdapter<CharSequence> presAdapter = ArrayAdapter.createFromResource(
                 context, R.array.presentacion, android.R.layout.simple_spinner_item);
@@ -394,7 +379,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (edtQty.getText().toString() != "") {
+                if (!edtQty.getText().toString().equals("")) {
                     PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
                 }
             }
@@ -425,7 +410,9 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                PrintmaxTestService.largo = Integer.parseInt(edtLargo.getText().toString());
+                if(!edtLargo.getText().toString().equals("")){
+                    PrintmaxTestService.largo = Integer.parseInt(edtLargo.getText().toString());
+                }
             }
         });
 
@@ -506,49 +493,29 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
                     @Override
                     public void onResponse(Call<Price> call, Response<Price> response) {
+                        if (PrintmaxTestService.cantidad >= 10000) {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
+                        } else if (PrintmaxTestService.cantidad >= 5000) {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
+                        } else if (PrintmaxTestService.cantidad >= 3000) {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
+                        } else if (PrintmaxTestService.cantidad >= 1000) {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
+                        } else {
+                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
+                        }
+
                         if (PrintmaxTestService.unidad == "Metros") {
-                            if (PrintmaxTestService.cantidad > 15000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
-                            } else if (PrintmaxTestService.cantidad > 10000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
-                            } else if (PrintmaxTestService.cantidad > 5000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
-                            } else if (PrintmaxTestService.cantidad > 3000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
-                            } else {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
-                            }
                             PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
                         } else {
                             PrintmaxTestService.cantidad *= PrintmaxTestService.largo;
-                            if (PrintmaxTestService.cantidad > 15000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
-                            } else if (PrintmaxTestService.cantidad > 10000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
-                            } else if (PrintmaxTestService.cantidad > 5000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
-                            } else if (PrintmaxTestService.cantidad > 3000) {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
-                            } else {
-                                PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
-                            }
                         }
 
-                        if(PrintmaxTestService.colores == 2){
-                            PrintmaxTestService.price += PrintmaxTestService.price / 10;
-                        } else if(PrintmaxTestService.colores == 3){
-                            PrintmaxTestService.price += (PrintmaxTestService.price / 100)*18;
-                        } else if (PrintmaxTestService.colores == 4){
-                            PrintmaxTestService.price += PrintmaxTestService.price / 4;
+                        if(PrintmaxTestService.presentacion == 0) {
+                            PrintmaxTestService.price -= (PrintmaxTestService.price / 100) * 5;
                         }
-                        if(PrintmaxTestService.material < 8){
-                            if(PrintmaxTestService.price < 2500){
-                                PrintmaxTestService.price = 2500;
-                            }
-                        } else {
-                            if(PrintmaxTestService.price < 3000){
-                                PrintmaxTestService.price = 3000;
-                            }
+                        if(PrintmaxTestService.price < 3000){
+                            PrintmaxTestService.price = 3000;
                         }
                         showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
                         dialog.dismiss();
@@ -611,7 +578,6 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     cartItem.colores = PrintmaxTestService.colores;
                     cartItem.presentacion = PrintmaxTestService.presentacion;
                     cartItem.price = finalPrice;
-                    cartItem.link = drinkList.get(position).link;
 
                     //Add to DB
                     PrintmaxTestService.get().cartRepository.insertIntoCart(cartItem);
