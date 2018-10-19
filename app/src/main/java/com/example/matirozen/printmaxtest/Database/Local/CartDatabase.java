@@ -17,7 +17,7 @@ public abstract  class CartDatabase extends RoomDatabase {
     static final Migration MIGRATION_2_3 = new Migration(3, 4) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE IF NOT EXISTS Cart (id INTEGER NOT NULL, name TEXT, link TEXT, cantidad INTEGER NOT NULL, unidad TEXT, price REAL NOT NULL, material INTEGER NOT NULL, ancho INTEGER NOT NULL, largo INTEGER NOT NULL, colores INTEGER NOT NULL, presentacion INTEGER NOT NULL, PRIMARY KEY(id))");
+            database.execSQL("CREATE TABLE IF NOT EXISTS Cart (id INTEGER NOT NULL, etiqueta TEXT, link TEXT, cantidad INTEGER NOT NULL, unidad TEXT, material INTEGER NOT NULL, ancho INTEGER NOT NULL, largo INTEGER NOT NULL, colores INTEGER NOT NULL, presentacion INTEGER NOT NULL, price REAL NOT NULL, PRIMARY KEY(id))");
         }
     };
 

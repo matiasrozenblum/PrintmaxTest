@@ -41,7 +41,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         Picasso.with(context)
                 .load(cartList.get(position).link)
                 .into(holder.imgProduct);
-        holder.txtProductName.setText(cartList.get(position).name);
+        holder.txtProductName.setText(cartList.get(position).etiqueta);
         holder.txtPrice.setText(new StringBuilder("$").append(cartList.get(position).price));
         holder.txtDetails.setText(new StringBuilder("Cantidad: ")
                 .append(cartList.get(position).cantidad).append(" ").append(cartList.get(position).unidad).append("\n")

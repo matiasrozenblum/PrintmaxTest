@@ -15,8 +15,9 @@ public class Cart {
     public int id;
 
     @Nullable
-    @ColumnInfo(name = "name")
-    public String name;
+    @ColumnInfo(name = "etiqueta")
+    public String etiqueta;
+
 
     @Nullable
     @ColumnInfo(name = "link")
@@ -29,10 +30,6 @@ public class Cart {
     @Nullable
     @ColumnInfo(name = "unidad")
     public String unidad;
-
-    @Nullable
-    @ColumnInfo(name = "price")
-    public double price;
 
     @ColumnInfo(name = "material")
     public int material;
@@ -52,4 +49,9 @@ public class Cart {
     @Nullable
     @ColumnInfo(name = "presentacion")
     public int presentacion;
+
+    @Nullable
+    @ColumnInfo(name = "price")
+    public double price;
+
 }

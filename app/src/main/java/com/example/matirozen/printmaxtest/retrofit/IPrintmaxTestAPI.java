@@ -4,6 +4,7 @@ import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.Drink;
+import com.example.matirozen.printmaxtest.Model.Order;
 import com.example.matirozen.printmaxtest.Model.Price;
 import com.example.matirozen.printmaxtest.Model.User;
 
@@ -48,6 +49,22 @@ public interface IPrintmaxTestAPI {
                              @Field("phone") String phone);
 
     @FormUrlEncoded
+    @POST("submitelement.php")
+    Call<String> submitElement(@Field("etiqueta") String etiqueta,
+                             @Field("cantidad") int cantidad,
+                             @Field("unidad") String unidad,
+                             @Field("material") String material,
+                             @Field("ancho") int ancho,
+                             @Field("largo") int largo,
+                             @Field("colores") int colores,
+                             @Field("presentacion") String presentacion,
+                             @Field("price") double price,
+                             @Field("orderId") int orderId);
+
+    @FormUrlEncoded
     @POST("getprice.php")
     Call<Price> getPrice(@Field("code") String code);
+
+    @GET("getlastorder.php")
+    Call<List<Order>> getLastOrder();
 }

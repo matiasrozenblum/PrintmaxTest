@@ -160,7 +160,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (edtQty.getText().toString() != "") {
+                if (edtQty.getText().toString() != "" && edtQty.getText().toString() != "0") {
                     PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
                 }
             }
@@ -569,7 +569,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
                     //Add to SQLite
                     Cart cartItem = new Cart();
-                    cartItem.name = txtProductDialog.getText().toString();
+                    cartItem.etiqueta = txtProductDialog.getText().toString();
                     cartItem.cantidad = cantidad;
                     cartItem.unidad = unidad;
                     cartItem.material = PrintmaxTestService.material;

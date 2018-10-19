@@ -1,64 +1,69 @@
 package com.example.matirozen.printmaxtest.Model;
 
 public class Order {
-    private long orderId;
-    private int orderStatus;
-    private float orderPrice;
-    private String orderDetail, orderComment, orderAddrses, userPhone;
+    private long orderid;
+    private float orderprice;
+    private String orderdetail, ordercomment, userphone;
 
-    public long getOrderId() {
-        return orderId;
+    public Order() {
     }
 
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
+    public Order(long orderid, float orderprice, String orderdetail, String ordercomment, String userphone) {
+        this.orderid = orderid;
+        this.orderprice = orderprice;
+        this.orderdetail = orderdetail;
+        this.ordercomment = ordercomment;
+        this.userphone = userphone;
     }
 
-    public int getOrderStatus() {
-        return orderStatus;
+    public String getorderdetail() {
+        return orderdetail;
     }
 
-    public void setOrderStatus(int orderStatus) {
-        this.orderStatus = orderStatus;
+    public void setorderdetail(String orderdetail) {
+        this.orderdetail = orderdetail;
     }
 
-    public float getOrderPrice() {
-        return orderPrice;
+    public long getorderid() {
+        return orderid;
     }
 
-    public void setOrderPrice(float orderPrice) {
-        this.orderPrice = orderPrice;
+    public void setorderid(long orderid) {
+        this.orderid = orderid;
     }
 
-    public String getOrderDetail() {
-        return orderDetail;
+    public float getorderprice() {
+        return orderprice;
     }
 
-    public void setOrderDetail(String orderDetail) {
-        this.orderDetail = orderDetail;
+    public void setorderprice(float orderprice) {
+        this.orderprice = orderprice;
     }
 
-    public String getOrderComment() {
-        return orderComment;
+    public String getordercomment() {
+        return ordercomment;
     }
 
-    public void setOrderComment(String orderComment) {
-        this.orderComment = orderComment;
+    public void setordercomment(String ordercomment) {
+        this.ordercomment = ordercomment;
     }
 
-    public String getOrderAddrses() {
-        return orderAddrses;
+    public String getuserphone() {
+        return userphone;
     }
 
-    public void setOrderAddrses(String orderAddrses) {
-        this.orderAddrses = orderAddrses;
+    public void setuserphone(String userphone) {
+        this.userphone = userphone;
     }
 
-    public String getUserPhone() {
-        return userPhone;
-    }
-
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderid=" + orderid +
+                ", orderprice=" + orderprice +
+                ", orderdetail='" + orderdetail + '\'' +
+                ", ordercomment='" + ordercomment + '\'' +
+                ", userphone='" + userphone + '\'' +
+                '}';
     }
 }

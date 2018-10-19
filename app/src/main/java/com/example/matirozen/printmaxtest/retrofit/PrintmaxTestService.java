@@ -9,6 +9,7 @@ import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.Drink;
+import com.example.matirozen.printmaxtest.Model.Order;
 import com.example.matirozen.printmaxtest.Model.Price;
 import com.example.matirozen.printmaxtest.Model.User;
 
@@ -80,7 +81,15 @@ public class PrintmaxTestService {
         return api.submitOrder(price, detail, comment, phone);
     }
 
+    public Call<String> submitElement(String etiqueta, int cantidad, String unidad, String material, int ancho, int largo, int colores, String presentacion, double price, int orderId){
+        return api.submitElement(etiqueta, cantidad, unidad, material, ancho, largo, colores, presentacion, price, orderId);
+    }
+
     public Call<Price> getPrice(String code){
         return api.getPrice(code);
+    }
+
+    public Call<List<Order>> getLastOrder(){
+        return api.getLastOrder();
     }
 }

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.Adapter.CartAdapter;
 import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
+import com.example.matirozen.printmaxtest.Model.Order;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.example.matirozen.printmaxtest.Utils.RecyclerItemTouchHelper;
 import com.example.matirozen.printmaxtest.Utils.RecyclerItemTouchHelperListener;
@@ -47,6 +48,10 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
     List<Cart> cartList =  new ArrayList<>();
     CartAdapter cartAdapter;
     RelativeLayout rootLayout;
+    String[] material = {"fasco", "saten", "poliamida", "poliamida eco", "saten negro", "saten marfil", "saten autoadhesivo", "algodon", "alta definicion", "tafeta"};
+    String[] presentacion = {"rollo", "cortadas"};
+    List<Order> orderList =  new ArrayList<>();
+    int orderId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,9 +114,9 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
 
     private void sendOrderToServer(float price, List<Cart> carts, String orderComment) {
         if(carts.size() > 0){
-            String orderDetail = new Gson().toJson(carts);
+            final List<Cart> finalCarts = carts;
 
-            PrintmaxTestService.get().submitOrder(price, orderDetail, orderComment, PrintmaxTestService.currentUser.getPhone())
+            PrintmaxTestService.get().submitOrder(price, "a", orderComment, PrintmaxTestService.currentUser.getPhone())
                     .enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
@@ -126,6 +131,32 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
                             Log.e("ERROR", t.getMessage());
                         }
                     });
+            PrintmaxTestService.get().getLastOrder().enqueue(new Callback<List<Order>>() {
+                @Override
+                public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                    orderList = response.body();
+                    orderId = (int) orderList.get(0).getorderid();
+                }
+
+                @Override
+                public void onFailure(Call<List<Order>> call, Throwable t) {
+                    Log.e("ERROR", t.getMessage());
+                }
+            });
+            for(Cart etiqueta : finalCarts){
+                PrintmaxTestService.get().submitElement(etiqueta.etiqueta, etiqueta.cantidad, etiqueta.unidad, material[etiqueta.material], etiqueta.ancho, etiqueta.largo, etiqueta.colores,  presentacion[etiqueta.presentacion], etiqueta.price, (int) orderList.get(0).getorderid())
+                        .enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Log.e("ERROR", t.getMessage());
+                            }
+                        });
+            }
         }
     }
 
@@ -170,7 +201,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if(viewHolder instanceof CartAdapter.CartViewHolder){
-            String name = cartList.get(viewHolder.getAdapterPosition()).name;
+            String name = cartList.get(viewHolder.getAdapterPosition()).etiqueta;
 
             final Cart deletedItem = cartList.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
