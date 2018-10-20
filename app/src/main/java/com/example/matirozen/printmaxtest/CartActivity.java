@@ -136,6 +136,20 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
                 public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                     orderList = response.body();
                     orderId = (int) orderList.get(0).getorderid();
+                    for(Cart etiqueta : finalCarts){
+                        PrintmaxTestService.get().submitElement(etiqueta.etiqueta, etiqueta.cantidad, etiqueta.unidad, material[etiqueta.material], etiqueta.ancho, etiqueta.largo, etiqueta.colores,  presentacion[etiqueta.presentacion], etiqueta.price, (int) orderList.get(0).getorderid())
+                                .enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        Log.e("ERROR", t.getMessage());
+                                    }
+                                });
+                    }
                 }
 
                 @Override
@@ -143,20 +157,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
                     Log.e("ERROR", t.getMessage());
                 }
             });
-            for(Cart etiqueta : finalCarts){
-                PrintmaxTestService.get().submitElement(etiqueta.etiqueta, etiqueta.cantidad, etiqueta.unidad, material[etiqueta.material], etiqueta.ancho, etiqueta.largo, etiqueta.colores,  presentacion[etiqueta.presentacion], etiqueta.price, (int) orderList.get(0).getorderid())
-                        .enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
 
-                            }
-
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                Log.e("ERROR", t.getMessage());
-                            }
-                        });
-            }
         }
     }
 
