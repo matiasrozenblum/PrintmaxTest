@@ -213,7 +213,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
             PrintmaxTestService.cartRepository.deleteCartItem(deletedItem);
 
             Snackbar snackbar = Snackbar.make(rootLayout, new StringBuilder(name).append(" removido del carrito").toString(), Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
+            snackbar.setAction("DESHACER", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     cartAdapter.restoreItem(deletedItem, deletedIndex);

@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
 import com.example.matirozen.printmaxtest.Interface.ItemClickListener;
-import com.example.matirozen.printmaxtest.Model.Drink;
+import com.example.matirozen.printmaxtest.Model.Tag;
 import com.example.matirozen.printmaxtest.Model.Price;
 import com.example.matirozen.printmaxtest.R;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
@@ -36,31 +36,31 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
+public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
     Context context;
-    List<Drink> drinkList;
+    List<Tag> tagList;
     String[] material = {"fasco", "saten", "poliamida", "poliamida eco", "saten negro", "saten marfil", "saten autoadhesivo", "algodon", "alta definicion", "tafeta"};
     String[] codigo = {"f", "s", "p", "pe", "sn", "sm", "sa", "al", "ad", "tf"};
     String[] presentacion = {"rollo", "cortadas"};
     private static final int ESTAMPADAS = 0;
     private static final int BORDADAS = 1;
 
-    public TypeAdapter(Context context, List<Drink> drinkList) {
+    public TypeAdapter(Context context, List<Tag> tagList) {
         this.context = context;
-        this.drinkList = drinkList;
+        this.tagList = tagList;
     }
 
     @NonNull
     @Override
-    public DrinkViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.drink_item_layout, null);
-        return new DrinkViewHolder(itemView);
+    public TagViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View itemView = LayoutInflater.from(context).inflate(R.layout.tag_item_layout, null);
+        return new TagViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DrinkViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull TagViewHolder holder, final int position) {
         if(position == 0){
-            holder.txt_drink_name.setText(drinkList.get(position).name);
+            holder.txt_tag_name.setText(tagList.get(position).name);
             holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -68,7 +68,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 }
             });
             Picasso.with(context)
-                    .load(drinkList.get(position).link)
+                    .load(tagList.get(position).link)
                     .into(holder.img_product);
             holder.setItemClickListener(new ItemClickListener() {
                 @Override
@@ -77,7 +77,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 }
             });
         } else if(position == 1){
-            holder.txt_drink_name.setText(drinkList.get(position).name);
+            holder.txt_tag_name.setText(tagList.get(position).name);
             holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -85,7 +85,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                 }
             });
             Picasso.with(context)
-                    .load(drinkList.get(position).link)
+                    .load(tagList.get(position).link)
                     .into(holder.img_product);
             holder.setItemClickListener(new ItemClickListener() {
                 @Override
@@ -98,7 +98,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
     @Override
     public int getItemCount() {
-        return drinkList.size();
+        return tagList.size();
     }
 
     private void estampadasShowAddToCartDialog(final int position) {
@@ -236,12 +236,12 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
 
         Picasso.with(context)
-                .load(drinkList.get(position).link)
+                .load(tagList.get(position).link)
                 .into(imgProductDialog);
-        txtProductDialog.setText(drinkList.get(position).name);
+        txtProductDialog.setText(tagList.get(position).name);
 
         builder.setView(itemView);
-        builder.setNegativeButton("Add to cart", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Añadir al carrito", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
                 if(PrintmaxTestService.cantidad == -1){
@@ -457,12 +457,12 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
 
         Picasso.with(context)
-                .load(drinkList.get(position).link)
+                .load(tagList.get(position).link)
                 .into(imgProductDialog);
-        txtProductDialog.setText(drinkList.get(position).name);
+        txtProductDialog.setText(tagList.get(position).name);
 
         builder.setView(itemView);
-        builder.setNegativeButton("Add to cart", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Añadir al carrito", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
                 if(PrintmaxTestService.cantidad == -1){
@@ -548,8 +548,8 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         TextView txtColores = (TextView)itemView.findViewById(R.id.txtColores);
         TextView txtPres = (TextView)itemView.findViewById(R.id.txtPres);
 
-        Picasso.with(context).load(drinkList.get(position).link).into(imgProductDialog);
-        txtProductDialog.setText(new StringBuilder(drinkList.get(position).name).toString());
+        Picasso.with(context).load(tagList.get(position).link).into(imgProductDialog);
+        txtProductDialog.setText(new StringBuilder(tagList.get(position).name).toString());
         txtCantidad.setText(new StringBuilder().append(PrintmaxTestService.cantidad).append(" ").append(unidad).toString());
         txtColores.setText(new StringBuilder("Colores: ").append(PrintmaxTestService.colores));
         String mat = material[PrintmaxTestService.material];
@@ -561,7 +561,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         txtPres.setText(new StringBuilder("Presentacion: ").append(pres));
 
         final double finalPrice = PrintmaxTestService.price;
-        builder.setNegativeButton("Confirm", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Confirmar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
