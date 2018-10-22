@@ -1,9 +1,11 @@
 package com.example.matirozen.printmaxtest.Adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,11 +24,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
+import com.example.matirozen.printmaxtest.HomeActivity;
 import com.example.matirozen.printmaxtest.Interface.ItemClickListener;
 import com.example.matirozen.printmaxtest.Model.Tag;
 import com.example.matirozen.printmaxtest.Model.Price;
 import com.example.matirozen.printmaxtest.R;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
+import com.example.matirozen.printmaxtest.Utils.Listener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -44,6 +48,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
     String[] presentacion = {"rollo", "cortadas"};
     private static final int ESTAMPADAS = 0;
     private static final int BORDADAS = 1;
+    private Listener listener;
 
     public TypeAdapter(Context context, List<Tag> tagList) {
         this.context = context;
@@ -588,11 +593,18 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                     Toast.makeText(context, ex.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d("MATIROZEN_DEBUG", ex.getMessage());
                 }
+                listener.update();
             }
         });
 
         builder.setView(itemView);
         builder.show();
+
+
+    }
+
+    public void setListener(Listener listener){
+        this.listener = listener;
     }
 
     private boolean isEstampada() {

@@ -16,12 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.matirozen.printmaxtest.Adapter.TypeAdapter;
 import com.example.matirozen.printmaxtest.Model.Tag;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
+import com.example.matirozen.printmaxtest.Utils.Listener;
 import com.facebook.accountkit.AccountKit;
 import com.nex3z.notificationbadge.NotificationBadge;
 
@@ -33,7 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Listener {
 
     TextView txtName, txtPhone;
     RecyclerView lst_tag;
@@ -90,6 +92,8 @@ public class HomeActivity extends AppCompatActivity
     private void displayTagList(List<Tag> tags) {
         TypeAdapter adapter = new TypeAdapter(this, tags);
         lst_tag.setAdapter(adapter);
+        TypeAdapter typeAdapter = (TypeAdapter)lst_tag.getAdapter();
+        typeAdapter.setListener(HomeActivity.this);
     }
 
     @Override
@@ -198,6 +202,10 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        updateCartCount();
+    }
+
+    public void update() {
         updateCartCount();
     }
 }
