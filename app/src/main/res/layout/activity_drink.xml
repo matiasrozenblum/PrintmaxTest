@@ -33,7 +33,7 @@
     </FrameLayout>
     
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_drinks"
+        android:id="@+id/recycler_tags"
         android:layout_margin="8dp"
         android:layout_weight="6"
         android:layout_width="match_parent"
