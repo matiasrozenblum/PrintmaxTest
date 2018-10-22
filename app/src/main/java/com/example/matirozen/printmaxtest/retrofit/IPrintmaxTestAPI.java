@@ -44,7 +44,6 @@ public interface IPrintmaxTestAPI {
     @FormUrlEncoded
     @POST("submitorder.php")
     Call<String> submitOrder(@Field("price") float orderPrice,
-                             @Field("orderDetail") String orderDetail,
                              @Field("comment") String comment,
                              @Field("phone") String phone);
 

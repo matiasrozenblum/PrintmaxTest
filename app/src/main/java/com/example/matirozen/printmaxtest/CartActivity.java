@@ -116,7 +116,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         if(carts.size() > 0){
             final List<Cart> finalCarts = carts;
 
-            PrintmaxTestService.get().submitOrder(price, "a", orderComment, PrintmaxTestService.currentUser.getPhone())
+            PrintmaxTestService.get().submitOrder(price, orderComment, PrintmaxTestService.currentUser.getPhone())
                     .enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {

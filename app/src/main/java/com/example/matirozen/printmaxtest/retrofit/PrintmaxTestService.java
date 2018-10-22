@@ -77,8 +77,8 @@ public class PrintmaxTestService {
         return api.getDrink(menuId);
     }
 
-    public Call<String> submitOrder(float price, String detail, String comment, String phone){
-        return api.submitOrder(price, detail, comment, phone);
+    public Call<String> submitOrder(float price, String comment, String phone){
+        return api.submitOrder(price, comment, phone);
     }
 
     public Call<String> submitElement(String etiqueta, int cantidad, String unidad, String material, int ancho, int largo, int colores, String presentacion, double price, int orderId){
