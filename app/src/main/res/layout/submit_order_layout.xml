@@ -9,7 +9,7 @@
 
     <EditText
         android:id="@+id/edtComment"
-        android:hint="Comment"
+        android:hint="Nombre o empresa del cliente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

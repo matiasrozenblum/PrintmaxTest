@@ -116,7 +116,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         if(carts.size() > 0){
             final List<Cart> finalCarts = carts;
 
-            PrintmaxTestService.get().submitOrder(price, "a", orderComment, PrintmaxTestService.currentUser.getPhone())
+            PrintmaxTestService.get().submitOrder(price, orderComment, PrintmaxTestService.currentUser.getPhone())
                     .enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
@@ -136,6 +136,20 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
                 public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                     orderList = response.body();
                     orderId = (int) orderList.get(0).getorderid();
+                    for(Cart etiqueta : finalCarts){
+                        PrintmaxTestService.get().submitElement(etiqueta.etiqueta, etiqueta.cantidad, etiqueta.unidad, material[etiqueta.material], etiqueta.ancho, etiqueta.largo, etiqueta.colores,  presentacion[etiqueta.presentacion], etiqueta.price, (int) orderList.get(0).getorderid())
+                                .enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        Log.e("ERROR", t.getMessage());
+                                    }
+                                });
+                    }
                 }
 
                 @Override
@@ -143,20 +157,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
                     Log.e("ERROR", t.getMessage());
                 }
             });
-            for(Cart etiqueta : finalCarts){
-                PrintmaxTestService.get().submitElement(etiqueta.etiqueta, etiqueta.cantidad, etiqueta.unidad, material[etiqueta.material], etiqueta.ancho, etiqueta.largo, etiqueta.colores,  presentacion[etiqueta.presentacion], etiqueta.price, (int) orderList.get(0).getorderid())
-                        .enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
 
-                            }
-
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                Log.e("ERROR", t.getMessage());
-                            }
-                        });
-            }
         }
     }
 
@@ -212,7 +213,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
             PrintmaxTestService.cartRepository.deleteCartItem(deletedItem);
 
             Snackbar snackbar = Snackbar.make(rootLayout, new StringBuilder(name).append(" removido del carrito").toString(), Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
+            snackbar.setAction("DESHACER", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     cartAdapter.restoreItem(deletedItem, deletedIndex);

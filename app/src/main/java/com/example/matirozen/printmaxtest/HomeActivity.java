@@ -3,8 +3,6 @@ package com.example.matirozen.printmaxtest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,12 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.matirozen.printmaxtest.Adapter.TypeAdapter;
-import com.example.matirozen.printmaxtest.Model.Drink;
+import com.example.matirozen.printmaxtest.Model.Tag;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
+import com.example.matirozen.printmaxtest.Utils.Listener;
 import com.facebook.accountkit.AccountKit;
 import com.nex3z.notificationbadge.NotificationBadge;
 
@@ -35,10 +35,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Listener {
 
     TextView txtName, txtPhone;
-    RecyclerView lst_drink;
+    RecyclerView lst_tag;
     NotificationBadge badge;
     ImageView cartIcon;
 
@@ -51,10 +51,10 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        lst_drink = (RecyclerView)findViewById(R.id.recycler_drinks);
-        lst_drink.setLayoutManager(new GridLayoutManager(this, 2));
-        lst_drink.setHasFixedSize(true);
-        loadListDrink("6");
+        lst_tag = (RecyclerView)findViewById(R.id.recycler_tags);
+        lst_tag.setLayoutManager(new GridLayoutManager(this, 2));
+        lst_tag.setHasFixedSize(true);
+        loadListTag("6");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -74,24 +74,26 @@ public class HomeActivity extends AppCompatActivity
         txtPhone.setText(PrintmaxTestService.currentUser.getPhone());
     }
 
-    private void loadListDrink(String menuId) {
-        PrintmaxTestService.get().getDrink(menuId)
-                .enqueue(new Callback<List<Drink>>() {
+    private void loadListTag(String menuId) {
+        PrintmaxTestService.get().getTag(menuId)
+                .enqueue(new Callback<List<Tag>>() {
                     @Override
-                    public void onResponse(Call<List<Drink>> call, Response<List<Drink>> response) {
-                        displayDrinkList(response.body());
+                    public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
+                        displayTagList(response.body());
                     }
 
                     @Override
-                    public void onFailure(Call<List<Drink>> call, Throwable t) {
+                    public void onFailure(Call<List<Tag>> call, Throwable t) {
                         Log.d("hola", "hola");
                     }
                 });
     }
 
-    private void displayDrinkList(List<Drink> drinks) {
-        TypeAdapter adapter = new TypeAdapter(this, drinks);
-        lst_drink.setAdapter(adapter);
+    private void displayTagList(List<Tag> tags) {
+        TypeAdapter adapter = new TypeAdapter(this, tags);
+        lst_tag.setAdapter(adapter);
+        TypeAdapter typeAdapter = (TypeAdapter)lst_tag.getAdapter();
+        typeAdapter.setListener(HomeActivity.this);
     }
 
     @Override
@@ -200,6 +202,10 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        updateCartCount();
+    }
+
+    public void update() {
         updateCartCount();
     }
 }

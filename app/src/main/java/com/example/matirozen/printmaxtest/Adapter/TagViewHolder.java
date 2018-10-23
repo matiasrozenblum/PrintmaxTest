@@ -10,10 +10,10 @@ import android.widget.TextView;
 import com.example.matirozen.printmaxtest.Interface.ItemClickListener;
 import com.example.matirozen.printmaxtest.R;
 
-public class DrinkViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class TagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     ImageView img_product;
-    TextView txt_drink_name, txt_price;
+    TextView txt_tag_name, txt_price;
 
     ItemClickListener itemClickListener;
 
@@ -23,11 +23,11 @@ public class DrinkViewHolder extends RecyclerView.ViewHolder implements View.OnC
         this.itemClickListener = itemClickListener;
     }
 
-    public DrinkViewHolder(@NonNull View itemView) {
+    public TagViewHolder(@NonNull View itemView) {
         super(itemView);
 
         img_product = (ImageView)itemView.findViewById(R.id.image_product);
-        txt_drink_name = (TextView) itemView.findViewById(R.id.txt_drink_name);
+        txt_tag_name = (TextView) itemView.findViewById(R.id.txt_tag_name);
         btnAddToCart = (Button)itemView.findViewById(R.id.btn_add_to_cart);
 
         itemView.setOnClickListener(this);

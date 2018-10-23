@@ -60,32 +60,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initDB();
-        btnContinue = findViewById(R.id.btn_continue);
-        btnContinue.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                //Check session
-                if(PrintmaxTestService.userRepository.getUserDB() != null){
-                    PrintmaxTestService.get().getUserInformation(PrintmaxTestService.userRepository.getUserDB().phone)
-                            .enqueue(new Callback<User>() {
-                                @Override
-                                public void onResponse(Call<User> call, Response<User> response) {
-                                    //If User already exists, just start new Activity
-                                    PrintmaxTestService.currentUser = response.body();
-                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                                    finish();
-                                }
+        if(PrintmaxTestService.userRepository.getUserDB() != null){
+            PrintmaxTestService.get().getUserInformation(PrintmaxTestService.userRepository.getUserDB().phone)
+                    .enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            //If User already exists, just start new Activity
+                            PrintmaxTestService.currentUser = response.body();
+                            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                            finish();
+                        }
 
-                                @Override
-                                public void onFailure(Call<User> call, Throwable t) {
-                                    Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                } else {
-                    showRegisterDialog();
-                }
-            }
-        });
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            showRegisterDialog();
+        }
     }
 
     private void initDB() {

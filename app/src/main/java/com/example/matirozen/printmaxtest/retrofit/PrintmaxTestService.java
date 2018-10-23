@@ -5,18 +5,14 @@ import com.example.matirozen.printmaxtest.Database.DataSource.CartRepository;
 import com.example.matirozen.printmaxtest.Database.DataSource.UserRepository;
 import com.example.matirozen.printmaxtest.Database.Local.CartDatabase;
 import com.example.matirozen.printmaxtest.Database.Local.UserDatabase;
-import com.example.matirozen.printmaxtest.Model.Banner;
 import com.example.matirozen.printmaxtest.Model.Category;
-import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
-import com.example.matirozen.printmaxtest.Model.Drink;
 import com.example.matirozen.printmaxtest.Model.Order;
 import com.example.matirozen.printmaxtest.Model.Price;
+import com.example.matirozen.printmaxtest.Model.Tag;
 import com.example.matirozen.printmaxtest.Model.User;
 
 import java.util.List;
 
-import io.reactivex.Observable;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class PrintmaxTestService {
@@ -53,10 +49,6 @@ public class PrintmaxTestService {
         api = RetrofitClient.createClient(BuildConfig.BASE_URL).create(com.example.matirozen.printmaxtest.Retrofit.IPrintmaxTestAPI.class);
     }
 
-    public Call<CheckUserResponse> checkIfUserExists(String phone){
-        return api.checkExistsUser(phone);
-    }
-
     public Call<User> registerNewUser(String phone, String name){
         return api.registerNewUser(phone, name);
     }
@@ -65,20 +57,12 @@ public class PrintmaxTestService {
         return api.getUserInformation(phone);
     }
 
-    public Call<List<Banner>> getBanners(){
-        return api.getBanners();
+    public Call<List<Tag>> getTag(String menuId){
+        return api.getTag(menuId);
     }
 
-    public Call<List<Category>> getMenu(){
-        return api.getMenu();
-    }
-
-    public Call<List<Drink>> getDrink(String menuId){
-        return api.getDrink(menuId);
-    }
-
-    public Call<String> submitOrder(float price, String detail, String comment, String phone){
-        return api.submitOrder(price, detail, comment, phone);
+    public Call<String> submitOrder(float price, String comment, String phone){
+        return api.submitOrder(price, comment, phone);
     }
 
     public Call<String> submitElement(String etiqueta, int cantidad, String unidad, String material, int ancho, int largo, int colores, String presentacion, double price, int orderId){
