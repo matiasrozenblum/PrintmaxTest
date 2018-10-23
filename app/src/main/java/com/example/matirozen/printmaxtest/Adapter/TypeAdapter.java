@@ -273,15 +273,15 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     @Override
                     public void onResponse(Call<Price> call, Response<Price> response) {
                         if (PrintmaxTestService.cantidad >= 10000) {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioe());
                         } else if (PrintmaxTestService.cantidad >= 5000) {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getpreciod());
                         } else if (PrintmaxTestService.cantidad >= 3000) {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioc());
                         } else if (PrintmaxTestService.cantidad >= 1000) {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getpreciob());
                         } else {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioa());
                         }
 
                         if (PrintmaxTestService.unidad == "Metros") {
@@ -494,15 +494,15 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
                     @Override
                     public void onResponse(Call<Price> call, Response<Price> response) {
                         if (PrintmaxTestService.cantidad >= 10000) {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioe());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioe());
                         } else if (PrintmaxTestService.cantidad >= 5000) {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getpreciod());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getpreciod());
                         } else if (PrintmaxTestService.cantidad >= 3000) {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioc());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioc());
                         } else if (PrintmaxTestService.cantidad >= 1000) {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getpreciob());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getpreciob());
                         } else {
-                            PrintmaxTestService.price = Double.parseDouble(response.body().getprecioa());
+                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioa());
                         }
 
                         if (PrintmaxTestService.unidad == "Metros") {
@@ -560,7 +560,7 @@ public class TypeAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
         txtTam.setText(new StringBuilder("Tamaño: ").append(PrintmaxTestService.ancho).append(" mm x ").append(PrintmaxTestService.largo).append(" mm"));
         txtPres.setText(new StringBuilder("Presentacion: ").append(pres));
 
-        final double finalPrice = PrintmaxTestService.price;
+        final float finalPrice = PrintmaxTestService.price;
         builder.setNegativeButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

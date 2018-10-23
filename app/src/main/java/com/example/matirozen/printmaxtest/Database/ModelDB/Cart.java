@@ -52,6 +52,6 @@ public class Cart {
 
     @Nullable
     @ColumnInfo(name = "price")
-    public double price;
+    public float price;
 
 }
