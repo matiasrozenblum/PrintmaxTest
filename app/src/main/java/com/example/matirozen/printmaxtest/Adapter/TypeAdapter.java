@@ -34,6 +34,7 @@ import com.example.matirozen.printmaxtest.Utils.Listener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -46,6 +47,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
     String[] material = {"fasco", "saten", "poliamida", "poliamida eco", "saten negro", "saten marfil", "saten autoadhesivo", "algodon", "alta definicion", "tafeta"};
     String[] codigo = {"f", "s", "p", "pe", "sn", "sm", "sa", "al", "ad", "tf"};
     String[] presentacion = {"rollo", "cortadas"};
+    int[] anchoBordadas = {12, 14, 16, 20, 25, 40, 50, 65, 80, 99};
+    int[] anchoEstampadas = {10, 15, 20, 25, 30, 35, 40, 50};
     private static final int ESTAMPADAS = 0;
     private static final int BORDADAS = 1;
     private Listener listener;
@@ -69,7 +72,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
             holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    estampadasShowAddToCartDialog(position);
+                    estampadasShowAddToCartDialog(position, false);
                 }
             });
             Picasso.with(context)
@@ -86,7 +89,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
             holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    bordadasShowAddToCartDialog(position);
+                    bordadasShowAddToCartDialog(position, false);
                 }
             });
             Picasso.with(context)
@@ -106,7 +109,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
         return tagList.size();
     }
 
-    private void estampadasShowAddToCartDialog(final int position) {
+    private void estampadasShowAddToCartDialog(final int position, boolean volver) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View itemView = LayoutInflater.from(context)
                 .inflate(R.layout.estampadas_add_to_cart_layout, null);
@@ -138,7 +141,28 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                 context, R.array.presentacion, android.R.layout.simple_spinner_item);
         presAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spPresentacion.setAdapter(presAdapter);
-        PrintmaxTestService.unidad = "Metros";
+        if(volver){
+            if(PrintmaxTestService.unidad == "Metros"){
+                rbMetros.setChecked(true);
+                rbUnidades.setChecked(false);
+            } else {
+                rbMetros.setChecked(false);
+                rbUnidades.setChecked(true);
+            }
+
+            edtQty.setText(String.valueOf(PrintmaxTestService.cantidad));
+            spAncho.setSelection(Arrays.binarySearch(anchoBordadas, PrintmaxTestService.ancho));
+            edtLargo.setText(String.valueOf(PrintmaxTestService.largo));
+            spMaterial.setSelection(PrintmaxTestService.material);
+            spColores.setSelection(PrintmaxTestService.colores-1);
+            spPresentacion.setSelection(PrintmaxTestService.presentacion);
+        } else {
+            PrintmaxTestService.unidad = "Metros";
+            PrintmaxTestService.material = 0;
+            PrintmaxTestService.colores = 1;
+            PrintmaxTestService.presentacion = 0;
+        }
+
         rbMetros.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -200,7 +224,6 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
             }
         });
 
-        PrintmaxTestService.material = 0;
         spMaterial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -213,7 +236,6 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
             }
         });
 
-        PrintmaxTestService.colores = 1;
         spColores.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -226,7 +248,6 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
             }
         });
 
-        PrintmaxTestService.presentacion = 0;
         spPresentacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -325,7 +346,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
 
     }
 
-    private void bordadasShowAddToCartDialog(final int position) {
+    private void bordadasShowAddToCartDialog(final int position, boolean volver) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View itemView = LayoutInflater.from(context)
                 .inflate(R.layout.bordadas_add_to_cart_layout, null);
@@ -357,108 +378,128 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                 context, R.array.presentacion, android.R.layout.simple_spinner_item);
         presAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spPresentacion.setAdapter(presAdapter);
-        PrintmaxTestService.unidad = "Metros";
-        rbMetros.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.unidad = "Metros";
-            }
-        });
-        rbUnidades.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.unidad = "Unidades";
-            }
-        });
-
-        edtQty.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+        if(volver){
+            if(PrintmaxTestService.unidad == "Metros"){
+                rbMetros.setChecked(true);
+                rbUnidades.setChecked(false);
+            } else {
+                rbMetros.setChecked(false);
+                rbUnidades.setChecked(true);
             }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (!edtQty.getText().toString().equals("")) {
-                    PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
+            edtQty.setText(String.valueOf(PrintmaxTestService.cantidad));
+            spAncho.setSelection(Arrays.binarySearch(anchoBordadas, PrintmaxTestService.ancho));
+            edtLargo.setText(String.valueOf(PrintmaxTestService.largo));
+            spMaterial.setSelection(PrintmaxTestService.material-8);
+            spColores.setSelection(PrintmaxTestService.colores-1);
+            spPresentacion.setSelection(PrintmaxTestService.presentacion);
+        } else {
+            PrintmaxTestService.unidad = "Metros";
+            PrintmaxTestService.material = 8;
+            PrintmaxTestService.colores = 1;
+            PrintmaxTestService.presentacion = 0;
+        }
+            rbMetros.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    PrintmaxTestService.unidad = "Metros";
                 }
-            }
-        });
-
-        spAncho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                PrintmaxTestService.ancho = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        edtLargo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!edtLargo.getText().toString().equals("")){
-                    PrintmaxTestService.largo = Integer.parseInt(edtLargo.getText().toString());
+            });
+            rbUnidades.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    PrintmaxTestService.unidad = "Unidades";
                 }
-            }
-        });
+            });
 
-        PrintmaxTestService.material = 8;
-        spMaterial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                PrintmaxTestService.material = i+8;
-            }
+            edtQty.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                }
 
-            }
-        });
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        PrintmaxTestService.colores = 1;
-        spColores.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                PrintmaxTestService.colores = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
-            }
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (!edtQty.getText().toString().equals("")) {
+                        PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
+                    }
+                }
+            });
 
-            }
-        });
+            spAncho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    PrintmaxTestService.ancho = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
+                }
 
-        PrintmaxTestService.presentacion = 0;
-        spPresentacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                PrintmaxTestService.presentacion = i;
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                }
+            });
+            edtLargo.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
-        });
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if(!edtLargo.getText().toString().equals("")){
+                        PrintmaxTestService.largo = Integer.parseInt(edtLargo.getText().toString());
+                    }
+                }
+            });
+
+
+            spMaterial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    PrintmaxTestService.material = i+8;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+
+            spColores.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    PrintmaxTestService.colores = Integer.parseInt(adapterView.getItemAtPosition(i).toString());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+
+            spPresentacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    PrintmaxTestService.presentacion = i;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
 
 
         Picasso.with(context)
@@ -510,11 +551,10 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                             PrintmaxTestService.price = Float.parseFloat(response.body().getprecioa());
                         }
 
-                        if (PrintmaxTestService.unidad == "Metros") {
-                            PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
-                        } else {
+                        if (PrintmaxTestService.unidad == "Unidades") {
                             PrintmaxTestService.cantidad *= PrintmaxTestService.largo;
                         }
+                        PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
 
                         if(PrintmaxTestService.presentacion == 0) {
                             PrintmaxTestService.price -= (PrintmaxTestService.price / 100) * 5;
@@ -566,7 +606,13 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
         txtPres.setText(new StringBuilder("Presentacion: ").append(pres));
         
         final float finalPrice = PrintmaxTestService.price;
-        builder.setNegativeButton("Confirmar", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Volver", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                bordadasShowAddToCartDialog(position, true);
+            }
+        });
+        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
