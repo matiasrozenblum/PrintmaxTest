@@ -30,6 +30,8 @@ public class PrintmaxTestService {
     public static int ancho = -1;
     public static int largo = -1;
     public static int colores = -1;
+    public static float priceUnidad = 0;
+    public static float priceMetro = 0;
     public static float price = 0;
 
     //Database

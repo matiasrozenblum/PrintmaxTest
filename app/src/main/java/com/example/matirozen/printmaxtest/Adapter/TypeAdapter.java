@@ -46,7 +46,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
     List<Tag> tagList;
     String[] material = {"fasco", "saten", "poliamida", "poliamida eco", "saten negro", "saten marfil", "saten autoadhesivo", "algodon", "alta definicion", "tafeta"};
     String[] codigo = {"f", "s", "p", "pe", "sn", "sm", "sa", "al", "ad", "tf"};
-    String[] presentacion = {"rollo", "cortadas"};
+    String[] presentacion = {"rollo", "cortadas", "cortadas y dobladas"};
     int[] anchoBordadas = {12, 14, 16, 20, 25, 40, 50, 65, 80, 99};
     int[] anchoEstampadas = {10, 15, 20, 25, 30, 35, 40, 50};
     private static final int ESTAMPADAS = 0;
@@ -324,7 +324,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                             PrintmaxTestService.price += PrintmaxTestService.price / 4;
                         }
 
-                        if(PrintmaxTestService.presentacion == 1){
+                        if(PrintmaxTestService.presentacion == 1 && PrintmaxTestService.presentacion == 2){
                             PrintmaxTestService.price += (PrintmaxTestService.price / 100)*15;
                         }
                         if(PrintmaxTestService.price < 2500){
@@ -562,6 +562,9 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                         if(PrintmaxTestService.price < 3000){
                             PrintmaxTestService.price = 3000;
                         }
+
+                        PrintmaxTestService.priceUnidad = Float.parseFloat(response.body().getporunidad());
+                        PrintmaxTestService.priceMetro = Float.parseFloat(response.body().getpormetro());
                         showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
                         dialog.dismiss();
                     }
@@ -586,6 +589,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
         //View
         ImageView imgProductDialog = (ImageView)itemView.findViewById(R.id.img_product);
         final TextView txtProductDialog = (TextView)itemView.findViewById(R.id.txt_cart_product_name);
+        TextView txtProductPriceUnidad = (TextView)itemView.findViewById(R.id.txt_cart_product_priceUnidad);
+        TextView txtProductPriceMetro = (TextView)itemView.findViewById(R.id.txt_cart_product_priceMetro);
         TextView txtProductPrice = (TextView)itemView.findViewById(R.id.txt_cart_product_price);
         TextView txtCantidad = (TextView)itemView.findViewById(R.id.txt_metros);
         TextView txtMaterial = (TextView)itemView.findViewById(R.id.txt_material);
@@ -600,7 +605,9 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
         String mat = material[PrintmaxTestService.material];
         String pres = presentacion[PrintmaxTestService.presentacion];
 
-        txtProductPrice.setText(new StringBuilder("$").append(PrintmaxTestService.price).toString());
+        txtProductPriceUnidad.setText(new StringBuilder("Por unidad: $").append(PrintmaxTestService.priceUnidad).toString());
+        txtProductPriceMetro.setText(new StringBuilder("Por metro: $").append(PrintmaxTestService.priceMetro).toString());
+        txtProductPrice.setText(new StringBuilder("Total: $").append(PrintmaxTestService.price).toString());
         txtMaterial.setText(new StringBuilder("Material: ").append(mat));
         txtTam.setText(new StringBuilder("Tamaño: ").append(PrintmaxTestService.ancho).append(" mm x ").append(PrintmaxTestService.largo).append(" mm"));
         txtPres.setText(new StringBuilder("Presentacion: ").append(pres));

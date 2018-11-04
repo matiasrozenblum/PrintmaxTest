@@ -65,5 +65,6 @@
     <string-array name="presentacion">
         <item>Rollo</item>
         <item>Cortadas</item>
+        <item>Cortadas y dobladas</item>
     </string-array>
 </resources>
