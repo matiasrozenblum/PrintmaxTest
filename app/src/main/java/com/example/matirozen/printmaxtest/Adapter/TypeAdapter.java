@@ -52,6 +52,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
     private static final int ESTAMPADAS = 0;
     private static final int BORDADAS = 1;
     private Listener listener;
+    int cantUnidades;
+    int cantMetros;
 
     public TypeAdapter(Context context, List<Tag> tagList) {
         this.context = context;
@@ -298,6 +300,14 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                 PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
                     @Override
                     public void onResponse(Call<Price> call, Response<Price> response) {
+                        if (PrintmaxTestService.unidad == "Unidades") {
+                            cantUnidades = PrintmaxTestService.cantidad;
+                            PrintmaxTestService.cantidad *= (PrintmaxTestService.largo *1000);
+                            cantMetros = PrintmaxTestService.cantidad;
+                        } else {
+                            cantMetros = PrintmaxTestService.cantidad;
+                            cantUnidades = (PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
+                        }
                         if (PrintmaxTestService.cantidad >= 10000) {
                             PrintmaxTestService.price = Float.parseFloat(response.body().getprecioe());
                         } else if (PrintmaxTestService.cantidad >= 5000) {
@@ -308,12 +318,6 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                             PrintmaxTestService.price = Float.parseFloat(response.body().getpreciob());
                         } else {
                             PrintmaxTestService.price = Float.parseFloat(response.body().getprecioa());
-                        }
-
-                        if (PrintmaxTestService.unidad == "Metros") {
-                            PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
-                        } else {
-                            PrintmaxTestService.cantidad *= PrintmaxTestService.largo;
                         }
 
                         if(PrintmaxTestService.colores == 2){
@@ -330,6 +334,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                         if(PrintmaxTestService.price < 2500){
                             PrintmaxTestService.price = 2500;
                         }
+                        PrintmaxTestService.priceMetro = PrintmaxTestService.price / cantMetros;
+                        PrintmaxTestService.priceUnidad = PrintmaxTestService.price / cantUnidades;
                         showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
                         dialog.dismiss();
                     }
@@ -539,6 +545,14 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                 PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
                     @Override
                     public void onResponse(Call<Price> call, Response<Price> response) {
+                        if (PrintmaxTestService.unidad == "Unidades") {
+                            cantUnidades = PrintmaxTestService.cantidad;
+                            PrintmaxTestService.cantidad *= (PrintmaxTestService.largo *1000);
+                            cantMetros = PrintmaxTestService.cantidad;
+                        } else {
+                            cantMetros = PrintmaxTestService.cantidad;
+                            cantUnidades = (PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
+                        }
                         if (PrintmaxTestService.cantidad >= 10000) {
                             PrintmaxTestService.price = Float.parseFloat(response.body().getprecioe());
                         } else if (PrintmaxTestService.cantidad >= 5000) {
@@ -551,9 +565,6 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                             PrintmaxTestService.price = Float.parseFloat(response.body().getprecioa());
                         }
 
-                        if (PrintmaxTestService.unidad == "Unidades") {
-                            PrintmaxTestService.cantidad *= PrintmaxTestService.largo;
-                        }
                         PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
 
                         if(PrintmaxTestService.presentacion == 0) {
@@ -562,9 +573,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                         if(PrintmaxTestService.price < 3000){
                             PrintmaxTestService.price = 3000;
                         }
-
-                        PrintmaxTestService.priceUnidad = Float.parseFloat(response.body().getporunidad());
-                        PrintmaxTestService.priceMetro = Float.parseFloat(response.body().getpormetro());
+                        PrintmaxTestService.priceMetro = PrintmaxTestService.price / cantMetros;
+                        PrintmaxTestService.priceUnidad = PrintmaxTestService.price / cantUnidades;
                         showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
                         dialog.dismiss();
                     }
@@ -600,7 +610,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
 
         Picasso.with(context).load(tagList.get(position).link).into(imgProductDialog);
         txtProductDialog.setText(new StringBuilder(tagList.get(position).name).toString());
-        txtCantidad.setText(new StringBuilder().append(PrintmaxTestService.cantidad).append(" ").append(unidad).toString());
+        txtCantidad.setText(new StringBuilder().append(cantMetros).append(" metros").append("\n")
+                .append(cantUnidades).append(" unidades").toString());
         txtColores.setText(new StringBuilder("Colores: ").append(PrintmaxTestService.colores));
         String mat = material[PrintmaxTestService.material];
         String pres = presentacion[PrintmaxTestService.presentacion];
@@ -616,7 +627,11 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
         builder.setNegativeButton("Volver", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                bordadasShowAddToCartDialog(position, true);
+                if(position == 0){
+                    estampadasShowAddToCartDialog(position, true);
+                } else {
+                    bordadasShowAddToCartDialog(position, true);
+                }
             }
         });
         builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {

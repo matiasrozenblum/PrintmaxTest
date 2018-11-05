@@ -7,22 +7,18 @@ public class Price {
     private String precioc;
     private String preciod;
     private String precioe;
-    private String porunidad;
-    private String pormetro;
 
     public Price() {
 
     }
 
-    public Price(String codigo, String precioa, String preciob, String precioc, String preciod, String precioe, String porunidad, String pormetro) {
+    public Price(String codigo, String precioa, String preciob, String precioc, String preciod, String precioe) {
         this.codigo = codigo;
         this.precioa = precioa;
         this.preciob = preciob;
         this.precioc = precioc;
         this.preciod = preciod;
         this.precioe = precioe;
-        this.porunidad = porunidad;
-        this.pormetro = pormetro;
 
     }
 
@@ -74,22 +70,6 @@ public class Price {
         this.precioe = precioe;
     }
 
-    public String getporunidad() {
-        return porunidad;
-    }
-
-    public void setporunidad(String porunidad) {
-        this.porunidad = porunidad;
-    }
-
-    public String getpormetro() {
-        return pormetro;
-    }
-
-    public void setpormetro(String pormetro) {
-        this.pormetro = pormetro;
-    }
-
     @Override
     public String toString() {
         return "Price{" +
@@ -99,8 +79,6 @@ public class Price {
                 ", precioc='" + precioc + '\'' +
                 ", preciod='" + preciod + '\'' +
                 ", precioe='" + precioe + '\'' +
-                ", porunidad='" + porunidad + '\'' +
-                ", pormetro='" + pormetro + '\'' +
                 '}';
     }
 }
