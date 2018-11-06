@@ -52,8 +52,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
     private static final int ESTAMPADAS = 0;
     private static final int BORDADAS = 1;
     private Listener listener;
-    int cantUnidades;
-    int cantMetros;
+    private float cantUnidades;
+    private float cantMetros;
 
     public TypeAdapter(Context context, List<Tag> tagList) {
         this.context = context;
@@ -118,8 +118,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
 
         //View
         ImageView imgProductDialog = (ImageView)itemView.findViewById(R.id.img_cart_product);
-        RadioButton rbMetros = (RadioButton)itemView.findViewById(R.id.rbMetros);
-        RadioButton rbUnidades = (RadioButton)itemView.findViewById(R.id.rbUnidades);
+        final RadioButton rbMetros = (RadioButton)itemView.findViewById(R.id.rbMetros);
+        final RadioButton rbUnidades = (RadioButton)itemView.findViewById(R.id.rbUnidades);
         final EditText edtQty = (EditText)itemView.findViewById(R.id.edt_qty);
         TextView txtProductDialog = (TextView)itemView.findViewById(R.id.txt_cart_product_name);
         Spinner spMaterial = (Spinner) itemView.findViewById(R.id.spMaterial);
@@ -147,12 +147,15 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
             if(PrintmaxTestService.unidad == "Metros"){
                 rbMetros.setChecked(true);
                 rbUnidades.setChecked(false);
+                edtQty.setText(String.valueOf(cantMetros));
+                PrintmaxTestService.cantidad = cantMetros;
             } else {
                 rbMetros.setChecked(false);
                 rbUnidades.setChecked(true);
+                edtQty.setText(String.valueOf(cantUnidades));
+                PrintmaxTestService.cantidad = cantUnidades;
             }
 
-            edtQty.setText(String.valueOf(PrintmaxTestService.cantidad));
             spAncho.setSelection(Arrays.binarySearch(anchoBordadas, PrintmaxTestService.ancho));
             edtLargo.setText(String.valueOf(PrintmaxTestService.largo));
             spMaterial.setSelection(PrintmaxTestService.material);
@@ -168,13 +171,17 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
         rbMetros.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.unidad = "Metros";
+                if(rbMetros.isChecked()){
+                    PrintmaxTestService.unidad = "Metros";
+                }
             }
         });
         rbUnidades.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PrintmaxTestService.unidad = "Unidades";
+                if(rbUnidades.isChecked()){
+                    PrintmaxTestService.unidad = "Unidades";
+                }
             }
         });
 
@@ -191,8 +198,13 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (edtQty.getText().toString() != "" && edtQty.getText().toString() != "0") {
-                    PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
+                try{
+                    if (edtQty.getText().toString() != "" && edtQty.getText().toString() != "0") {
+                        PrintmaxTestService.cantidad = Float.parseFloat(edtQty.getText().toString());
+                    }
+                }catch (NumberFormatException ex){
+                    Toast.makeText(context, "Valor invalido", Toast.LENGTH_SHORT).show();
+                    edtQty.setText("0");
                 }
             }
         });
@@ -222,7 +234,14 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                PrintmaxTestService.largo = Integer.parseInt(edtLargo.getText().toString());
+                if(!edtLargo.getText().toString().equals("")){
+                    try{
+                        PrintmaxTestService.largo = Float.parseFloat(edtLargo.getText().toString());
+                    }catch (NumberFormatException ex){
+                        Toast.makeText(context, "Valor invalido", Toast.LENGTH_SHORT).show();
+                        edtLargo.setText("");
+                    }
+                }
             }
         });
 
@@ -300,9 +319,11 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                 PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
                     @Override
                     public void onResponse(Call<Price> call, Response<Price> response) {
+                        cantMetros = 0;
+                        cantUnidades = 0;
                         if (PrintmaxTestService.unidad == "Unidades") {
                             cantUnidades = PrintmaxTestService.cantidad;
-                            PrintmaxTestService.cantidad *= (PrintmaxTestService.largo *1000);
+                            PrintmaxTestService.cantidad /= PrintmaxTestService.largo ;
                             cantMetros = PrintmaxTestService.cantidad;
                         } else {
                             cantMetros = PrintmaxTestService.cantidad;
@@ -359,8 +380,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
 
         //View
         ImageView imgProductDialog = (ImageView)itemView.findViewById(R.id.img_cart_product);
-        RadioButton rbMetros = (RadioButton)itemView.findViewById(R.id.rbMetros);
-        RadioButton rbUnidades = (RadioButton)itemView.findViewById(R.id.rbUnidades);
+        final RadioButton rbMetros = (RadioButton)itemView.findViewById(R.id.rbMetros);
+        final RadioButton rbUnidades = (RadioButton)itemView.findViewById(R.id.rbUnidades);
         final EditText edtQty = (EditText)itemView.findViewById(R.id.edt_qty);
         TextView txtProductDialog = (TextView)itemView.findViewById(R.id.txt_cart_product_name);
         Spinner spMaterial = (Spinner) itemView.findViewById(R.id.spMaterial);
@@ -388,12 +409,15 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
             if(PrintmaxTestService.unidad == "Metros"){
                 rbMetros.setChecked(true);
                 rbUnidades.setChecked(false);
+                edtQty.setText(String.valueOf(cantMetros));
+                PrintmaxTestService.cantidad = cantMetros;
             } else {
                 rbMetros.setChecked(false);
                 rbUnidades.setChecked(true);
+                edtQty.setText(String.valueOf(cantUnidades));
+                PrintmaxTestService.cantidad = cantUnidades;
             }
 
-            edtQty.setText(String.valueOf(PrintmaxTestService.cantidad));
             spAncho.setSelection(Arrays.binarySearch(anchoBordadas, PrintmaxTestService.ancho));
             edtLargo.setText(String.valueOf(PrintmaxTestService.largo));
             spMaterial.setSelection(PrintmaxTestService.material-8);
@@ -408,13 +432,17 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
             rbMetros.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(rbMetros.isChecked()){
                     PrintmaxTestService.unidad = "Metros";
+                }
                 }
             });
             rbUnidades.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(rbUnidades.isChecked()){
                     PrintmaxTestService.unidad = "Unidades";
+                }
                 }
             });
 
@@ -432,7 +460,14 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     if (!edtQty.getText().toString().equals("")) {
-                        PrintmaxTestService.cantidad = Integer.parseInt(edtQty.getText().toString());
+                        try{
+                            if (edtQty.getText().toString() != "" && edtQty.getText().toString() != "0") {
+                                PrintmaxTestService.cantidad = Float.parseFloat(edtQty.getText().toString());
+                            }
+                        }catch (NumberFormatException ex){
+                            Toast.makeText(context, "Valor invalido", Toast.LENGTH_SHORT).show();
+                            edtQty.setText("");
+                        }
                     }
                 }
             });
@@ -462,8 +497,11 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    if(!edtLargo.getText().toString().equals("")){
-                        PrintmaxTestService.largo = Integer.parseInt(edtLargo.getText().toString());
+                    try{
+                        PrintmaxTestService.largo = Float.parseFloat(edtLargo.getText().toString());
+                    }catch (NumberFormatException ex){
+                        Toast.makeText(context, "Valor invalido", Toast.LENGTH_SHORT).show();
+                        edtLargo.setText("");
                     }
                 }
             });
@@ -545,9 +583,11 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                 PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
                     @Override
                     public void onResponse(Call<Price> call, Response<Price> response) {
+                        cantMetros = 0;
+                        cantUnidades = 0;
                         if (PrintmaxTestService.unidad == "Unidades") {
                             cantUnidades = PrintmaxTestService.cantidad;
-                            PrintmaxTestService.cantidad *= (PrintmaxTestService.largo *1000);
+                            PrintmaxTestService.cantidad /= PrintmaxTestService.largo;
                             cantMetros = PrintmaxTestService.cantidad;
                         } else {
                             cantMetros = PrintmaxTestService.cantidad;
@@ -591,7 +631,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
 
     }
 
-    private void showConfirmDialog(final int position, final int cantidad, final String unidad) {
+    private void showConfirmDialog(final int position, final float cantidad, final String unidad) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View itemView = LayoutInflater.from(context)
                 .inflate(R.layout.confirm_add_to_cart_layout, null);
