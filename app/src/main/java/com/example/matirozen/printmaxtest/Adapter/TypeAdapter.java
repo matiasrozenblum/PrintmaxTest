@@ -52,8 +52,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
     private static final int ESTAMPADAS = 0;
     private static final int BORDADAS = 1;
     private Listener listener;
-    int cantUnidades;
-    int cantMetros;
+    float cantUnidades;
+    float cantMetros;
 
     public TypeAdapter(Context context, List<Tag> tagList) {
         this.context = context;
@@ -306,7 +306,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                             cantMetros = PrintmaxTestService.cantidad;
                         } else {
                             cantMetros = PrintmaxTestService.cantidad;
-                            cantUnidades = (PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
+                            cantUnidades = ((float) PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
                         }
                         if (PrintmaxTestService.cantidad >= 10000) {
                             PrintmaxTestService.price = Float.parseFloat(response.body().getprecioe());
@@ -320,6 +320,8 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                             PrintmaxTestService.price = Float.parseFloat(response.body().getprecioa());
                         }
 
+                        PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
+
                         if(PrintmaxTestService.colores == 2){
                             PrintmaxTestService.price += PrintmaxTestService.price / 10;
                         } else if(PrintmaxTestService.colores == 3){
@@ -331,8 +333,9 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                         if(PrintmaxTestService.presentacion == 1 && PrintmaxTestService.presentacion == 2){
                             PrintmaxTestService.price += (PrintmaxTestService.price / 100)*15;
                         }
-                        if(PrintmaxTestService.price < 2500){
-                            PrintmaxTestService.price = 2500;
+
+                        if(PrintmaxTestService.price < 3000){
+                            PrintmaxTestService.price = 3000;
                         }
                         PrintmaxTestService.priceMetro = PrintmaxTestService.price / cantMetros;
                         PrintmaxTestService.priceUnidad = PrintmaxTestService.price / cantUnidades;
@@ -551,7 +554,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                             cantMetros = PrintmaxTestService.cantidad;
                         } else {
                             cantMetros = PrintmaxTestService.cantidad;
-                            cantUnidades = (PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
+                            cantUnidades = ((float)PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
                         }
                         if (PrintmaxTestService.cantidad >= 10000) {
                             PrintmaxTestService.price = Float.parseFloat(response.body().getprecioe());
@@ -566,6 +569,14 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                         }
 
                         PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
+
+                        if(PrintmaxTestService.colores == 2){
+                            PrintmaxTestService.price += PrintmaxTestService.price / 10;
+                        } else if(PrintmaxTestService.colores == 3){
+                            PrintmaxTestService.price += (PrintmaxTestService.price / 100)*18;
+                        } else if (PrintmaxTestService.colores == 4){
+                            PrintmaxTestService.price += PrintmaxTestService.price / 4;
+                        }
 
                         if(PrintmaxTestService.presentacion == 0) {
                             PrintmaxTestService.price -= (PrintmaxTestService.price / 100) * 5;
@@ -611,7 +622,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
         Picasso.with(context).load(tagList.get(position).link).into(imgProductDialog);
         txtProductDialog.setText(new StringBuilder(tagList.get(position).name).toString());
         txtCantidad.setText(new StringBuilder().append(cantMetros).append(" metros").append("\n")
-                .append(cantUnidades).append(" unidades").toString());
+                .append((int) cantUnidades).append(" unidades").toString());
         txtColores.setText(new StringBuilder("Colores: ").append(PrintmaxTestService.colores));
         String mat = material[PrintmaxTestService.material];
         String pres = presentacion[PrintmaxTestService.presentacion];
