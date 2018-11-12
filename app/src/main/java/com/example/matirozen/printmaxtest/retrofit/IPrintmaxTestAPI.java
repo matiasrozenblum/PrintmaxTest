@@ -41,11 +41,11 @@ public interface IPrintmaxTestAPI {
     @FormUrlEncoded
     @POST("submitelement.php")
     Call<String> submitElement(@Field("etiqueta") String etiqueta,
-                             @Field("cantidad") int cantidad,
+                             @Field("cantidad") float cantidad,
                              @Field("unidad") String unidad,
                              @Field("material") String material,
                              @Field("ancho") int ancho,
-                             @Field("largo") int largo,
+                             @Field("largo") float largo,
                              @Field("colores") int colores,
                              @Field("presentacion") String presentacion,
                              @Field("price") double price,

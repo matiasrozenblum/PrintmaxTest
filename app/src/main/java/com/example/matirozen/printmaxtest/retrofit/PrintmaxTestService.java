@@ -23,12 +23,12 @@ public class PrintmaxTestService {
     public static User currentUser = null;
     public static Category currentCategory = null;
 
-    public static int cantidad = -1;
+    public static float cantidad = -1;
     public static String unidad = "";
     public static int material = -1; //-1: no choice, 0: fasco, 1: saten, 2: poliamida, 3: saten negro
     public static int presentacion = -1; //'1: no choice, 0: cortadas, 1: en rollo
     public static int ancho = -1;
-    public static int largo = -1;
+    public static float largo = -1;
     public static int colores = -1;
     public static float priceUnidad = 0;
     public static float priceMetro = 0;
@@ -67,7 +67,7 @@ public class PrintmaxTestService {
         return api.submitOrder(price, comment, phone);
     }
 
-    public Call<String> submitElement(String etiqueta, int cantidad, String unidad, String material, int ancho, int largo, int colores, String presentacion, double price, int orderId){
+    public Call<String> submitElement(String etiqueta, float cantidad, String unidad, String material, int ancho, float largo, int colores, String presentacion, double price, int orderId){
         return api.submitElement(etiqueta, cantidad, unidad, material, ancho, largo, colores, presentacion, price, orderId);
     }
 

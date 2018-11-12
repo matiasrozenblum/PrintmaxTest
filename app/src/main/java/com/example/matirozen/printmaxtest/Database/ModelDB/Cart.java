@@ -25,7 +25,7 @@ public class Cart {
 
     @Nullable
     @ColumnInfo(name = "cantidad")
-    public int cantidad;
+    public float cantidad;
 
     @Nullable
     @ColumnInfo(name = "unidad")
@@ -40,7 +40,7 @@ public class Cart {
 
     @Nullable
     @ColumnInfo(name = "largo")
-    public int largo;
+    public float largo;
 
     @Nullable
     @ColumnInfo(name = "colores")
