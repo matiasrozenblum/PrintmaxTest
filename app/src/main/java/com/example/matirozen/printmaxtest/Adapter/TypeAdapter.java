@@ -156,7 +156,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                 PrintmaxTestService.cantidad = cantUnidades;
             }
 
-            spAncho.setSelection(Arrays.binarySearch(anchoBordadas, PrintmaxTestService.ancho));
+            spAncho.setSelection(Arrays.binarySearch(anchoEstampadas, PrintmaxTestService.ancho));
             edtLargo.setText(String.valueOf(PrintmaxTestService.largo));
             spMaterial.setSelection(PrintmaxTestService.material);
             spColores.setSelection(PrintmaxTestService.colores-1);
