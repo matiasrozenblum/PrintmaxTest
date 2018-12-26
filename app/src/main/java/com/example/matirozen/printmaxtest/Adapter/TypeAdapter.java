@@ -1,11 +1,9 @@
 package com.example.matirozen.printmaxtest.Adapter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,16 +22,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
-import com.example.matirozen.printmaxtest.HomeActivity;
+import com.example.matirozen.printmaxtest.Database.ModelDB.Price;
 import com.example.matirozen.printmaxtest.Interface.ItemClickListener;
+import com.example.matirozen.printmaxtest.Model.Precio;
 import com.example.matirozen.printmaxtest.Model.Tag;
-import com.example.matirozen.printmaxtest.Model.Price;
 import com.example.matirozen.printmaxtest.R;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.example.matirozen.printmaxtest.Utils.Listener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -316,59 +315,50 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                     return;
                 }
                 String cod = new StringBuilder(codigo[PrintmaxTestService.material]).append(PrintmaxTestService.ancho).toString();
-                PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
-                    @Override
-                    public void onResponse(Call<Price> call, Response<Price> response) {
-                        cantMetros = 0;
-                        cantUnidades = 0;
-                        if (PrintmaxTestService.unidad == "Unidades") {
-                            cantUnidades = PrintmaxTestService.cantidad;
-                            PrintmaxTestService.cantidad /= PrintmaxTestService.largo ;
-                            cantMetros = PrintmaxTestService.cantidad;
-                        } else {
-                            cantMetros = PrintmaxTestService.cantidad;
-                            cantUnidades = ((float) PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
-                        }
-                        if (PrintmaxTestService.cantidad >= 10000) {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioe());
-                        } else if (PrintmaxTestService.cantidad >= 5000) {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getpreciod());
-                        } else if (PrintmaxTestService.cantidad >= 3000) {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioc());
-                        } else if (PrintmaxTestService.cantidad >= 1000) {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getpreciob());
-                        } else {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioa());
-                        }
+                Price precio = PrintmaxTestService.priceRepository.getPriceByCode(cod);
+                cantMetros = 0;
+                cantUnidades = 0;
+                if (PrintmaxTestService.unidad == "Unidades") {
+                    cantUnidades = PrintmaxTestService.cantidad;
+                    PrintmaxTestService.cantidad /= PrintmaxTestService.largo ;
+                    cantMetros = PrintmaxTestService.cantidad;
+                } else {
+                    cantMetros = PrintmaxTestService.cantidad;
+                    cantUnidades = ((float) PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
+                }
+                if (PrintmaxTestService.cantidad >= 10000) {
+                    PrintmaxTestService.price = precio.precioa;
+                } else if (PrintmaxTestService.cantidad >= 5000) {
+                    PrintmaxTestService.price = precio.preciob;
+                } else if (PrintmaxTestService.cantidad >= 3000) {
+                    PrintmaxTestService.price = precio.precioc;
+                } else if (PrintmaxTestService.cantidad >= 1000) {
+                    PrintmaxTestService.price = precio.preciod;
+                } else {
+                    PrintmaxTestService.price = precio.precioe;
+                }
 
-                        PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
+                PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
 
-                        if(PrintmaxTestService.colores == 2){
-                            PrintmaxTestService.price += PrintmaxTestService.price / 10;
-                        } else if(PrintmaxTestService.colores == 3){
-                            PrintmaxTestService.price += (PrintmaxTestService.price / 100)*18;
-                        } else if (PrintmaxTestService.colores == 4){
-                            PrintmaxTestService.price += PrintmaxTestService.price / 4;
-                        }
+                if(PrintmaxTestService.colores == 2){
+                    PrintmaxTestService.price += PrintmaxTestService.price / 10;
+                } else if(PrintmaxTestService.colores == 3){
+                    PrintmaxTestService.price += (PrintmaxTestService.price / 100)*18;
+                } else if (PrintmaxTestService.colores == 4){
+                    PrintmaxTestService.price += PrintmaxTestService.price / 4;
+                }
 
-                        if(PrintmaxTestService.presentacion == 1 && PrintmaxTestService.presentacion == 2){
-                            PrintmaxTestService.price += (PrintmaxTestService.price / 100)*15;
-                        }
+                if(PrintmaxTestService.presentacion == 1 || PrintmaxTestService.presentacion == 2){
+                    PrintmaxTestService.price += (PrintmaxTestService.price / 100)*15;
+                }
 
-                        if(PrintmaxTestService.price < 3000){
-                            PrintmaxTestService.price = 3000;
-                        }
-                        PrintmaxTestService.priceMetro = PrintmaxTestService.price / cantMetros;
-                        PrintmaxTestService.priceUnidad = PrintmaxTestService.price / cantUnidades;
-                        showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Price> call, Throwable t) {
-                        String price = "a";
-                    }
-                });
+                if(PrintmaxTestService.price < 3000){
+                    PrintmaxTestService.price = 3000;
+                }
+                PrintmaxTestService.priceMetro = PrintmaxTestService.price / cantMetros;
+                PrintmaxTestService.priceUnidad = PrintmaxTestService.price / cantUnidades;
+                showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
+                dialog.dismiss();
             }
         });
 
@@ -583,58 +573,49 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                     return;
                 }
                 String cod = new StringBuilder(codigo[PrintmaxTestService.material]).append(PrintmaxTestService.ancho).append(PrintmaxTestService.colores).append("c").toString();
-                PrintmaxTestService.get().getPrice(cod).enqueue(new Callback<Price>() {
-                    @Override
-                    public void onResponse(Call<Price> call, Response<Price> response) {
-                        cantMetros = 0;
-                        cantUnidades = 0;
-                        if (PrintmaxTestService.unidad == "Unidades") {
-                            cantUnidades = PrintmaxTestService.cantidad;
-                            PrintmaxTestService.cantidad /= PrintmaxTestService.largo;
-                            cantMetros = PrintmaxTestService.cantidad;
-                        } else {
-                            cantMetros = PrintmaxTestService.cantidad;
-                            cantUnidades = ((float)PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
-                        }
-                        if (PrintmaxTestService.cantidad >= 10000) {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioe());
-                        } else if (PrintmaxTestService.cantidad >= 5000) {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getpreciod());
-                        } else if (PrintmaxTestService.cantidad >= 3000) {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioc());
-                        } else if (PrintmaxTestService.cantidad >= 1000) {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getpreciob());
-                        } else {
-                            PrintmaxTestService.price = Float.parseFloat(response.body().getprecioa());
-                        }
+                Price precio = PrintmaxTestService.priceRepository.getPriceByCode(cod);
+                cantMetros = 0;
+                cantUnidades = 0;
+                if (PrintmaxTestService.unidad == "Unidades") {
+                    cantUnidades = PrintmaxTestService.cantidad;
+                    PrintmaxTestService.cantidad /= PrintmaxTestService.largo;
+                    cantMetros = PrintmaxTestService.cantidad;
+                } else {
+                    cantMetros = PrintmaxTestService.cantidad;
+                    cantUnidades = ((float)PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
+                }
+                if (PrintmaxTestService.cantidad >= 10000) {
+                    PrintmaxTestService.price = precio.precioa;
+                } else if (PrintmaxTestService.cantidad >= 5000) {
+                    PrintmaxTestService.price = precio.preciob;
+                } else if (PrintmaxTestService.cantidad >= 3000) {
+                    PrintmaxTestService.price = precio.precioc;
+                } else if (PrintmaxTestService.cantidad >= 1000) {
+                    PrintmaxTestService.price = precio.preciod;
+                } else {
+                    PrintmaxTestService.price = precio.precioe;
+                }
 
-                        PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
+                PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
 
-                        if(PrintmaxTestService.colores == 2){
-                            PrintmaxTestService.price += PrintmaxTestService.price / 10;
-                        } else if(PrintmaxTestService.colores == 3){
-                            PrintmaxTestService.price += (PrintmaxTestService.price / 100)*18;
-                        } else if (PrintmaxTestService.colores == 4){
-                            PrintmaxTestService.price += PrintmaxTestService.price / 4;
-                        }
+                if(PrintmaxTestService.colores == 2){
+                    PrintmaxTestService.price += PrintmaxTestService.price / 10;
+                } else if(PrintmaxTestService.colores == 3){
+                    PrintmaxTestService.price += (PrintmaxTestService.price / 100)*18;
+                } else if (PrintmaxTestService.colores == 4){
+                    PrintmaxTestService.price += PrintmaxTestService.price / 4;
+                }
 
-                        if(PrintmaxTestService.presentacion == 0) {
-                            PrintmaxTestService.price -= (PrintmaxTestService.price / 100) * 5;
-                        }
-                        if(PrintmaxTestService.price < 3000){
-                            PrintmaxTestService.price = 3000;
-                        }
-                        PrintmaxTestService.priceMetro = PrintmaxTestService.price / cantMetros;
-                        PrintmaxTestService.priceUnidad = PrintmaxTestService.price / cantUnidades;
-                        showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Price> call, Throwable t) {
-                        String price = "a";
-                    }
-                });
+                if(PrintmaxTestService.presentacion == 0) {
+                    PrintmaxTestService.price -= (PrintmaxTestService.price / 100) * 5;
+                }
+                if(PrintmaxTestService.price < 3000){
+                    PrintmaxTestService.price = 3000;
+                }
+                PrintmaxTestService.priceMetro = PrintmaxTestService.price / cantMetros;
+                PrintmaxTestService.priceUnidad = PrintmaxTestService.price / cantUnidades;
+                showConfirmDialog(position, PrintmaxTestService.cantidad, PrintmaxTestService.unidad);
+                dialog.dismiss();
             }
         });
 

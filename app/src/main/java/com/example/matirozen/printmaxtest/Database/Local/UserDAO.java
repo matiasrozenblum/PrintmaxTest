@@ -10,7 +10,7 @@ import com.example.matirozen.printmaxtest.Database.ModelDB.UserDB;
 
 @Dao
 public interface UserDAO {
-    @Query("SELECT * FROM `UserDB`")
+    @Query("SELECT * FROM `UserDB` ORDER BY id DESC LIMIT 1")
     UserDB getUserDB();
 
     @Insert

@@ -1,15 +1,11 @@
 package com.example.matirozen.printmaxtest;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,31 +13,22 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.Database.DataSource.CartRepository;
+import com.example.matirozen.printmaxtest.Database.DataSource.PriceRepository;
+import com.example.matirozen.printmaxtest.Database.DataSource.TagRepository;
 import com.example.matirozen.printmaxtest.Database.DataSource.UserRepository;
 import com.example.matirozen.printmaxtest.Database.Local.CartDataSource;
-import com.example.matirozen.printmaxtest.Database.Local.CartDatabase;
+import com.example.matirozen.printmaxtest.Database.Local.PriceDataSource;
+import com.example.matirozen.printmaxtest.Database.Local.TagDataSource;
 import com.example.matirozen.printmaxtest.Database.Local.UserDataSource;
 import com.example.matirozen.printmaxtest.Database.Local.UserDatabase;
-import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
 import com.example.matirozen.printmaxtest.Database.ModelDB.UserDB;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
-import com.example.matirozen.printmaxtest.Model.CheckUserResponse;
 import com.example.matirozen.printmaxtest.Model.User;
-import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
-import com.facebook.accountkit.Account;
-import com.facebook.accountkit.AccountKit;
-import com.facebook.accountkit.AccountKitCallback;
-import com.facebook.accountkit.AccountKitError;
-import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
 import com.google.gson.Gson;
 import com.rengwuxian.materialedittext.MaterialEditText;
-import com.szagurskii.patternedtextwatcher.PatternedTextWatcher;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
@@ -61,21 +48,12 @@ public class MainActivity extends AppCompatActivity {
 
         initDB();
         if(PrintmaxTestService.userRepository.getUserDB() != null){
-            PrintmaxTestService.get().getUserInformation(PrintmaxTestService.userRepository.getUserDB().phone)
-                    .enqueue(new Callback<User>() {
-                        @Override
-                        public void onResponse(Call<User> call, Response<User> response) {
-                            //If User already exists, just start new Activity
-                            PrintmaxTestService.currentUser = response.body();
-                            startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                            finish();
-                        }
-
-                        @Override
-                        public void onFailure(Call<User> call, Throwable t) {
-                            Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            User user = new User();
+            user.setName(PrintmaxTestService.userRepository.getUserDB().name);
+            user.setPhone(PrintmaxTestService.userRepository.getUserDB().phone);
+            PrintmaxTestService.currentUser = user;
+            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            finish();
         } else {
             showRegisterDialog();
         }
@@ -84,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
     private void initDB() {
         PrintmaxTestService.userDatabase = UserDatabase.getInstance(this);
         PrintmaxTestService.userRepository = UserRepository.getInstance(UserDataSource.getInstance(PrintmaxTestService.userDatabase.userDAO()));
-        PrintmaxTestService.cartDatabase = CartDatabase.getInstance(this);
-        PrintmaxTestService.cartRepository = CartRepository.getInstance(CartDataSource.getInstance(PrintmaxTestService.cartDatabase.cartDAO()));
+        PrintmaxTestService.cartRepository = CartRepository.getInstance(CartDataSource.getInstance(PrintmaxTestService.userDatabase.cartDAO()));
+        PrintmaxTestService.priceRepository = PriceRepository.getInstance(PriceDataSource.getInstance(PrintmaxTestService.userDatabase.priceDAO()));
+        PrintmaxTestService.tagRepository = TagRepository.getInstance(TagDataSource.getInstance(PrintmaxTestService.userDatabase.tagDAO()));
     }
 
     private void startLoginPage(LoginType loginType) {
@@ -152,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                                     UserDB userDB = new UserDB();
                                     final String userPhone = phone;
                                     userDB.phone = userPhone;
+                                    userDB.name = user.getName();
 
                                     //Add to DB
                                     PrintmaxTestService.userRepository.insertIntoUserDB(userDB);

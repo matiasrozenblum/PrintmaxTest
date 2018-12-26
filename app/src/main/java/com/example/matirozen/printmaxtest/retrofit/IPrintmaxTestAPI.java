@@ -1,11 +1,13 @@
 package com.example.matirozen.printmaxtest.Retrofit;
 
+import com.example.matirozen.printmaxtest.Database.ModelDB.Price;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.Order;
-import com.example.matirozen.printmaxtest.Model.Price;
+import com.example.matirozen.printmaxtest.Model.Precio;
 import com.example.matirozen.printmaxtest.Model.Tag;
 import com.example.matirozen.printmaxtest.Model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -53,8 +55,12 @@ public interface IPrintmaxTestAPI {
 
     @FormUrlEncoded
     @POST("getprice.php")
-    Call<Price> getPrice(@Field("code") String code);
+    Call<Precio> getPrice(@Field("code") String code);
 
     @GET("getlastorder.php")
     Call<List<Order>> getLastOrder();
+
+    @GET("getallprices.php")
+    Call<ArrayList<Precio>> getAllPrices();
+
 }

@@ -1,6 +1,6 @@
 package com.example.matirozen.printmaxtest.Model;
 
-public class Price {
+public class Precio {
     private String codigo;
     private String precioa;
     private String preciob;
@@ -8,11 +8,11 @@ public class Price {
     private String preciod;
     private String precioe;
 
-    public Price() {
+    public Precio() {
 
     }
 
-    public Price(String codigo, String precioa, String preciob, String precioc, String preciod, String precioe) {
+    public Precio(String codigo, String precioa, String preciob, String precioc, String preciod, String precioe) {
         this.codigo = codigo;
         this.precioa = precioa;
         this.preciob = preciob;
@@ -72,7 +72,7 @@ public class Price {
 
     @Override
     public String toString() {
-        return "Price{" +
+        return "Precio{" +
                 "codigo='" + codigo + '\'' +
                 ", precioa='" + precioa + '\'' +
                 ", preciob='" + preciob + '\'' +

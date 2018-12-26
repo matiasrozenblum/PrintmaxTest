@@ -7,19 +7,18 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
+import com.example.matirozen.printmaxtest.Database.ModelDB.Cart;
+import com.example.matirozen.printmaxtest.Database.ModelDB.Price;
+import com.example.matirozen.printmaxtest.Database.ModelDB.TagDB;
 import com.example.matirozen.printmaxtest.Database.ModelDB.UserDB;
 
-@Database(entities = {UserDB.class}, version = 3)
+@Database(entities = {UserDB.class, Cart.class, Price.class, TagDB.class}, version = 4)
 public abstract  class UserDatabase extends RoomDatabase {
     public abstract UserDAO userDAO();
+    public abstract CartDAO cartDAO();
+    public abstract PriceDAO priceDAO();
+    public abstract TagDAO tagDAO();
     public static UserDatabase instance;
-
-    static final Migration MIGRATION_2_3 = new Migration(4, 3) {
-        @Override
-        public void migrate(SupportSQLiteDatabase database) {
-            // Since we didn't alter the table, there's nothing else to do here.
-        }
-    };
 
     public static UserDatabase getInstance(Context context){
         if(instance == null){
@@ -30,4 +29,11 @@ public abstract  class UserDatabase extends RoomDatabase {
         }
         return instance;
     }
+
+    static final Migration MIGRATION_2_3 = new Migration(6, 7) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS Price (codigo TEXT NOT NULL, precioa REAL NOT NULL, preciob REAL NOT NULL, precioc REAL NOT NULL, preciod REAL NOT NULL, precioe REAL NOT NULL, PRIMARY KEY(codigo))");
+        }
+    };
 }

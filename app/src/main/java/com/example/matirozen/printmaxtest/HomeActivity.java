@@ -19,14 +19,20 @@ import android.view.MenuItem;
 import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.matirozen.printmaxtest.Adapter.TypeAdapter;
+import com.example.matirozen.printmaxtest.Database.Local.TagDAO;
+import com.example.matirozen.printmaxtest.Database.ModelDB.Price;
+import com.example.matirozen.printmaxtest.Database.ModelDB.TagDB;
+import com.example.matirozen.printmaxtest.Model.Precio;
 import com.example.matirozen.printmaxtest.Model.Tag;
 import com.example.matirozen.printmaxtest.Retrofit.PrintmaxTestService;
 import com.example.matirozen.printmaxtest.Utils.Listener;
 import com.facebook.accountkit.AccountKit;
 import com.nex3z.notificationbadge.NotificationBadge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -75,18 +81,59 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void loadListTag(String menuId) {
-        PrintmaxTestService.get().getTag(menuId)
-                .enqueue(new Callback<List<Tag>>() {
+        PrintmaxTestService.get().getAllPrices()
+                .enqueue(new Callback<ArrayList<Precio>>() {
                     @Override
-                    public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
-                        displayTagList(response.body());
+                    public void onResponse(Call<ArrayList<Precio>> call, Response<ArrayList<Precio>> response) {
+                        PrintmaxTestService.priceRepository.nukeTable();
+                        for(Precio precio : response.body()){
+                            Price price = new Price();
+                            price.codigo = precio.getCodigo();
+                            price.precioa = Float.valueOf(precio.getprecioa());
+                            price.preciob = Float.valueOf(precio.getpreciob());
+                            price.precioc = Float.valueOf(precio.getprecioc());
+                            price.preciod = Float.valueOf(precio.getpreciod());
+                            price.precioe = Float.valueOf(precio.getprecioe());
+                            PrintmaxTestService.priceRepository.insertIntoPrice(price);
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Tag>> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<Precio>> call, Throwable t) {
                         Log.d("hola", "hola");
                     }
                 });
+        if(PrintmaxTestService.tagRepository.getTags().size() > 0){
+            List<Tag> tagList = new ArrayList<>();
+            for(TagDB tagDB : PrintmaxTestService.tagRepository.getTags()){
+                Tag tag = new Tag();
+                tag.id = String.valueOf(tagDB.id);
+                tag.name = tagDB.name;
+                tag.link = tagDB.link;
+                tagList.add(tag);
+            }
+            displayTagList(tagList);
+        } else {
+            PrintmaxTestService.get().getTag(menuId)
+                    .enqueue(new Callback<List<Tag>>() {
+                        @Override
+                        public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
+                            for(Tag tag : response.body()) {
+                                TagDB tagDB = new TagDB();
+                                tagDB.id = Integer.valueOf(tag.id);
+                                tagDB.name = tag.name;
+                                tagDB.link = tag.link;
+                                PrintmaxTestService.tagRepository.insertIntoTagDB(tagDB);
+                            }
+                            displayTagList(response.body());
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Tag>> call, Throwable t) {
+                            Log.d("hola", "hola");
+                        }
+                    });
+        }
     }
 
     private void displayTagList(List<Tag> tags) {
@@ -165,13 +212,59 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        if(id == R.id.sync){
+            PrintmaxTestService.get().getTag("6").enqueue(new Callback<List<Tag>>() {
+                @Override
+                public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
+                    PrintmaxTestService.tagRepository.nukeTable();
+                    for(Tag tag : response.body()) {
+                        TagDB tagDB = new TagDB();
+                        tagDB.id = Integer.valueOf(tag.id);
+                        tagDB.name = tag.name;
+                        tagDB.link = tag.link;
+                        PrintmaxTestService.tagRepository.insertIntoTagDB(tagDB);
+                    }
+                    displayTagList(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<List<Tag>> call, Throwable t) {
+                    Log.d("hola", "hola");
+                }
+            });
+
+            PrintmaxTestService.get().getAllPrices().enqueue(new Callback<ArrayList<Precio>>() {
+                @Override
+                public void onResponse(Call<ArrayList<Precio>> call, Response<ArrayList<Precio>> response) {
+                    PrintmaxTestService.priceRepository.nukeTable();
+                    for(Precio precio : response.body()){
+                        Price price = new Price();
+                        price.codigo = precio.getCodigo();
+                        price.precioa = Float.valueOf(precio.getprecioa());
+                        price.preciob = Float.valueOf(precio.getpreciob());
+                        price.precioc = Float.valueOf(precio.getprecioc());
+                        price.preciod = Float.valueOf(precio.getpreciod());
+                        price.precioe = Float.valueOf(precio.getprecioe());
+                        PrintmaxTestService.priceRepository.insertIntoPrice(price);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<Precio>> call, Throwable t) {
+                    Log.d("hola", "hola");
+                }
+            });
+
+            Toast.makeText(HomeActivity.this, "Datos sincronizados", Toast.LENGTH_SHORT).show();
+        }
+
         if (id == R.id.nav_sign_out) {
             // Create confirm dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Exit Application");
             builder.setMessage("¿Esta seguro que quiere salir?");
 
-            builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     AccountKit.logOut();
@@ -184,7 +277,7 @@ public class HomeActivity extends AppCompatActivity
                 }
             });
 
-            builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

@@ -2,15 +2,17 @@ package com.example.matirozen.printmaxtest.Retrofit;
 
 import com.example.matirozen.printmaxtest.BuildConfig;
 import com.example.matirozen.printmaxtest.Database.DataSource.CartRepository;
+import com.example.matirozen.printmaxtest.Database.DataSource.PriceRepository;
+import com.example.matirozen.printmaxtest.Database.DataSource.TagRepository;
 import com.example.matirozen.printmaxtest.Database.DataSource.UserRepository;
-import com.example.matirozen.printmaxtest.Database.Local.CartDatabase;
 import com.example.matirozen.printmaxtest.Database.Local.UserDatabase;
 import com.example.matirozen.printmaxtest.Model.Category;
 import com.example.matirozen.printmaxtest.Model.Order;
-import com.example.matirozen.printmaxtest.Model.Price;
+import com.example.matirozen.printmaxtest.Model.Precio;
 import com.example.matirozen.printmaxtest.Model.Tag;
 import com.example.matirozen.printmaxtest.Model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,8 +39,9 @@ public class PrintmaxTestService {
     //Database
     public static UserDatabase userDatabase;
     public static UserRepository userRepository;
-    public static CartDatabase cartDatabase;
     public static CartRepository cartRepository;
+    public static PriceRepository priceRepository;
+    public static TagRepository tagRepository;
 
     public static PrintmaxTestService get() {
         if (INSTANCE == null) {
@@ -71,11 +74,15 @@ public class PrintmaxTestService {
         return api.submitElement(etiqueta, cantidad, unidad, material, ancho, largo, colores, presentacion, price, orderId);
     }
 
-    public Call<Price> getPrice(String code){
+    public Call<Precio> getPrice(String code){
         return api.getPrice(code);
     }
 
     public Call<List<Order>> getLastOrder(){
         return api.getLastOrder();
+    }
+
+    public Call<ArrayList<Precio>> getAllPrices() {
+        return api.getAllPrices();
     }
 }
