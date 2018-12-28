@@ -327,15 +327,15 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                     cantUnidades = ((float) PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
                 }
                 if (PrintmaxTestService.cantidad >= 10000) {
-                    PrintmaxTestService.price = precio.precioa;
+                    PrintmaxTestService.price = precio.precioe;
                 } else if (PrintmaxTestService.cantidad >= 5000) {
-                    PrintmaxTestService.price = precio.preciob;
+                    PrintmaxTestService.price = precio.preciod;
                 } else if (PrintmaxTestService.cantidad >= 3000) {
                     PrintmaxTestService.price = precio.precioc;
                 } else if (PrintmaxTestService.cantidad >= 1000) {
-                    PrintmaxTestService.price = precio.preciod;
+                    PrintmaxTestService.price = precio.preciob;
                 } else {
-                    PrintmaxTestService.price = precio.precioe;
+                    PrintmaxTestService.price = precio.precioa;
                 }
 
                 PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
@@ -349,7 +349,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                 }
 
                 if(PrintmaxTestService.presentacion == 1 || PrintmaxTestService.presentacion == 2){
-                    PrintmaxTestService.price += (PrintmaxTestService.price / 100)*15;
+                    PrintmaxTestService.price += (PrintmaxTestService.price / 100)*12;
                 }
 
                 if(PrintmaxTestService.price < 3000){
@@ -585,26 +585,18 @@ public class TypeAdapter extends RecyclerView.Adapter<TagViewHolder> {
                     cantUnidades = ((float)PrintmaxTestService.cantidad / PrintmaxTestService.largo) *1000;
                 }
                 if (PrintmaxTestService.cantidad >= 10000) {
-                    PrintmaxTestService.price = precio.precioa;
+                    PrintmaxTestService.price = precio.precioe;
                 } else if (PrintmaxTestService.cantidad >= 5000) {
-                    PrintmaxTestService.price = precio.preciob;
+                    PrintmaxTestService.price = precio.preciod;
                 } else if (PrintmaxTestService.cantidad >= 3000) {
                     PrintmaxTestService.price = precio.precioc;
                 } else if (PrintmaxTestService.cantidad >= 1000) {
-                    PrintmaxTestService.price = precio.preciod;
+                    PrintmaxTestService.price = precio.preciob;
                 } else {
-                    PrintmaxTestService.price = precio.precioe;
+                    PrintmaxTestService.price = precio.precioa;
                 }
 
                 PrintmaxTestService.price *=  PrintmaxTestService.cantidad;
-
-                if(PrintmaxTestService.colores == 2){
-                    PrintmaxTestService.price += PrintmaxTestService.price / 10;
-                } else if(PrintmaxTestService.colores == 3){
-                    PrintmaxTestService.price += (PrintmaxTestService.price / 100)*18;
-                } else if (PrintmaxTestService.colores == 4){
-                    PrintmaxTestService.price += PrintmaxTestService.price / 4;
-                }
 
                 if(PrintmaxTestService.presentacion == 0) {
                     PrintmaxTestService.price -= (PrintmaxTestService.price / 100) * 5;
